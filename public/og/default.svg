@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="b1" cx="20%" cy="30%" r="50%"><stop offset="0" stop-color="#2563eb" stop-opacity="0.85"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></radialGradient>
+    <radialGradient id="b2" cx="85%" cy="65%" r="45%"><stop offset="0" stop-color="#ff8a2c" stop-opacity="0.75"/><stop offset="1" stop-color="#ff8a2c" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0a0a0b"/>
+  <rect width="1200" height="630" fill="url(#b1)"/>
+  <rect width="1200" height="630" fill="url(#b2)"/>
+  <g transform="translate(80,90)">
+    <path d="M8 60V14h7v18l16-18h9L25 36l21 24h-9L15 39v21z" fill="#d8f22e" transform="scale(1.2)"/>
+    <circle cx="55" cy="20" r="4" fill="#d8f22e"/>
+  </g>
+  <g font-family="Bricolage Grotesque, Space Grotesk, sans-serif" fill="#fff">
+    <text x="80" y="340" font-size="120" font-weight="800" letter-spacing="-4">KAMP</text>
+    <text x="80" y="460" font-size="120" font-weight="800" letter-spacing="-4" fill="#d8f22e">MOTION.</text>
+    <text x="80" y="525" font-size="22" font-weight="500" opacity="0.85">Where Imagination Comes to Life</text>
+    <text x="80" y="570" font-size="18" opacity="0.6">2D Animation · Motion Graphic · Video · AI</text>
+  </g>
+</svg>

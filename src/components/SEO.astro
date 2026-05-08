@@ -1,0 +1,61 @@
+---
+import { SITE } from '../config/site';
+import type { Locale } from '../config/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  path: string; // current path without locale prefix, starting with /
+  ogImage?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: unknown[]; // additional structured data blocks
+}
+
+const {
+  title,
+  description,
+  locale,
+  path,
+  ogImage = SITE.ogImage,
+  type = 'website',
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+
+const fullTitle = title.includes(SITE.shortName) ? title : `${title} — ${SITE.name}`;
+const url = new URL(locale === 'id' ? path : `/en${path}`, SITE.url).toString();
+const idUrl = new URL(path, SITE.url).toString();
+const enUrl = new URL(`/en${path}`, SITE.url).toString();
+const ogImageUrl = new URL(ogImage, SITE.url).toString();
+const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
+---
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+<meta name="author" content={SITE.name} />
+<link rel="canonical" href={url} />
+<link rel="alternate" hreflang="id" href={idUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={idUrl} />
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={url} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:locale" content={htmlLang.replace('-', '_')} />
+<meta property="og:locale:alternate" content={locale === 'id' ? 'en_US' : 'id_ID'} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="theme-color" content="#0a0a0b" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" />
+{jsonLd.map((data) => (
+  <script type="application/ld+json" set:html={JSON.stringify(data)} is:inline />
+))}

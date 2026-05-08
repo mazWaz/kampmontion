@@ -1,0 +1,62 @@
+---
+import { t, localizedPath } from '../i18n/ui';
+import type { Locale } from '../config/site';
+import { SITE } from '../config/site';
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="relative border-t border-[var(--color-line)] mt-20 overflow-hidden">
+  <div class="km-aurora opacity-30"></div>
+  <div class="relative z-[2] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
+    <div class="grid gap-10 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <div class="font-display text-5xl md:text-7xl font-bold tracking-tight">
+          Kamp <span class="text-[var(--color-lime)]">Motion.</span>
+        </div>
+        <p class="mt-4 max-w-md text-white/55">{SITE.tagline[locale]}</p>
+        <div class="mt-8 flex flex-wrap gap-2">
+          <a href={SITE.social.instagram} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Instagram</a>
+          <a href={SITE.social.behance} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Behance</a>
+          <a href={SITE.social.fastwork} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Fastwork</a>
+        </div>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{t(locale,'nav.services')}</div>
+        <ul class="space-y-2.5 text-sm">
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/video-company-profile':'/en/services/company-profile-video'}>Company Profile</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/animasi-2d':'/en/services/2d-animation'}>2D Animation</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/motion-graphic':'/en/services/motion-graphic'}>Motion Graphic</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/visual-effect':'/en/services/visual-effects'}>VFX</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{locale==='id'?'Studio':'Studio'}</div>
+        <ul class="space-y-2.5 text-sm">
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/tentang':'/en/about'}>{t(locale,'nav.about')}</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={localizedPath(locale,'/portfolio')}>{t(locale,'nav.portfolio')}</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={localizedPath(locale,'/blog')}>{t(locale,'nav.blog')}</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{t(locale,'nav.contact')}</div>
+        <ul class="space-y-2.5 text-sm">
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={SITE.whatsapp} target="_blank" rel="noopener">{SITE.phoneDisplay}</a></li>
+          <li class="text-white/50">{SITE.address.locality}, {SITE.address.countryName}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-16 pt-6 border-t border-[var(--color-line)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
+      <div>© {year} {SITE.name}. {t(locale,'footer.rights')}</div>
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-lime)] animate-pulse"></span>
+        <span>{locale==='id'?'Tersedia untuk proyek baru':'Available for new projects'}</span>
+      </div>
+    </div>
+  </div>
+</footer>

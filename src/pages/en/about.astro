@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import Process from '../../components/Process.astro';
+import { team } from '../../data/team';
+import { SITE } from '../../config/site';
+import { organizationSchema, breadcrumb } from '../../lib/schema';
+
+const locale = 'en' as const;
+const title = 'About Kamp Motion Studio';
+const description = 'Kamp Motion is a Yogyakarta-based creative studio with 7+ years of experience and 50+ clients, blending human creativity with AI in every workflow.';
+const jsonLd = [
+  organizationSchema(locale),
+  breadcrumb([
+    { name: 'Home', url: SITE.url + '/en' },
+    { name: 'About', url: SITE.url + '/en/about' },
+  ]),
+];
+---
+<BaseLayout {title} {description} {locale} path="/about" {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">About Us</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Where Imagination Comes to Life</h1>
+      <p class="mt-6 text-lg text-white/75">Kamp Motion Studio is an Indonesian creative studio focused on 2D animation, motion graphics, and video production. Since {SITE.founded}, we have supported 50+ local and international brands in telling their visual stories — from tech startups to corporates and NGOs.</p>
+      <p class="mt-4 text-lg text-white/75">We believe combining human creativity with AI delivers work that is faster, sharper, and still has soul.</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+    <h2 class="font-display text-3xl md:text-4xl font-bold">Our Team</h2>
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {team.map((m) => (
+        <div class="p-6 rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)]">
+          <div class="w-16 h-16 rounded-full bg-[var(--color-lime)] flex items-center justify-center text-[#0a0a0b] font-display font-bold text-2xl">
+            {m.name.charAt(0)}
+          </div>
+          <div class="mt-4 font-display font-bold text-lg">{m.name}</div>
+          <div class="text-sm text-[var(--color-lime)]">{m.role.en}</div>
+          <p class="mt-2 text-sm text-white/65">{m.bio.en}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+  <Process locale={locale} />
+  <CTA locale={locale} />
+</BaseLayout>

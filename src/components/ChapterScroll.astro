@@ -1,0 +1,58 @@
+---
+export interface Props {
+  chapters: { id: string; label: string }[];
+  theme?: 'light' | 'dark';
+}
+const { chapters, theme = 'light' } = Astro.props;
+---
+<nav class="km-chapters" data-theme={theme} aria-label="Page sections">
+  {chapters.map((c, i) => (
+    <a href={`#${c.id}`} class={`km-chapter ${i === 0 ? 'active' : ''}`} data-target={c.id}>
+      <span class="km-chapter-label">{c.label}</span>
+      <span class="km-chapter-dot"></span>
+    </a>
+  ))}
+</nav>
+
+<script>
+function initChapters() {
+  const links = document.querySelectorAll<HTMLAnchorElement>('.km-chapter');
+  if (!links.length) return;
+  const targets = [...links]
+    .map((a) => document.getElementById(a.dataset.target!))
+    .filter((el): el is HTMLElement => !!el);
+  if (!targets.length) return;
+
+  const setActive = (id: string) => {
+    links.forEach((l) => l.classList.toggle('active', l.dataset.target === id));
+  };
+
+  // smooth-scroll + active update on click
+  links.forEach((l) =>
+    l.addEventListener('click', (e) => {
+      const id = l.dataset.target!;
+      const t = document.getElementById(id);
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setActive(id);
+      history.replaceState(null, '', `#${id}`);
+    })
+  );
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      // pick the entry closest to the top of viewport
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) setActive(visible[0].target.id);
+    },
+    { rootMargin: '-30% 0px -55% 0px', threshold: 0 }
+  );
+  targets.forEach((t) => io.observe(t));
+}
+
+initChapters();
+document.addEventListener('astro:page-load', initChapters);
+</script>

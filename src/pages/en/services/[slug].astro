@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CTA from '../../../components/CTA.astro';
+import { services } from '../../../data/services';
+import { SITE } from '../../../config/site';
+import { organizationSchema, breadcrumb, faqSchema } from '../../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slugEn }, props: { service: s } }));
+}
+
+const { service } = Astro.props;
+const locale = 'en' as const;
+const title = `${service.title.en} — Professional Service`;
+const description = service.short.en;
+const url = `${SITE.url}/en/services/${service.slugEn}`;
+
+const faqs = [
+  { question: `How long does ${service.title.en} production take?`, answer: 'Depends on complexity: 5–14 business days for standard projects, 2–6 weeks for larger or custom work.' },
+  { question: `Are revisions included in ${service.title.en}?`, answer: 'Yes, every package includes revisions within the agreed scope. Additional revisions are available pro-rata.' },
+  { question: 'Do you serve international clients?', answer: 'Absolutely. We work with both local and international clients via email, WhatsApp, or video call.' },
+];
+
+const jsonLd = [
+  organizationSchema(locale),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title.en,
+    serviceType: service.title.en,
+    description: service.long.en,
+    provider: { '@id': `${SITE.url}#organization` },
+    areaServed: ['Indonesia', 'Worldwide'],
+    url,
+    offers: { '@type': 'Offer', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+  },
+  faqSchema(faqs),
+  breadcrumb([
+    { name: 'Home', url: SITE.url + '/en' },
+    { name: 'Services', url: SITE.url + '/en/services' },
+    { name: service.title.en, url },
+  ]),
+];
+---
+<BaseLayout {title} {description} {locale} path={`/services/${service.slugEn}`} {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Service</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">{service.title.en}</h1>
+      <p class="mt-4 text-lg text-white/75">{service.short.en}</p>
+    </div>
+  </section>
+
+  <article class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
+    <p class="text-lg leading-relaxed text-white/80">{service.long.en}</p>
+    <h2 class="mt-12 font-display text-2xl font-bold">What You Get</h2>
+    <ul class="mt-4 space-y-2">
+      {service.deliverables.en.map((d: string) => (
+        <li class="flex gap-2"><span class="text-[var(--color-lime)]">✓</span><span>{d}</span></li>
+      ))}
+    </ul>
+    <h2 class="mt-12 font-display text-2xl font-bold">Frequently Asked Questions</h2>
+    <div class="mt-4 space-y-4">
+      {faqs.map((f) => (
+        <details class="group p-5 rounded-xl border border-[var(--color-line)] bg-[var(--color-ink-2)]">
+          <summary class="cursor-pointer font-semibold">{f.question}</summary>
+          <p class="mt-3 text-white/65">{f.answer}</p>
+        </details>
+      ))}
+    </div>
+  </article>
+  <CTA locale={locale} />
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../config/site';
+import { organizationSchema, breadcrumb } from '../../lib/schema';
+
+const locale = 'en' as const;
+const title = 'Contact — Start Your Project';
+const description = `Contact Kamp Motion Studio at ${SITE.email} or WhatsApp ${SITE.phoneDisplay} for motion graphic, 2D animation, and video production projects.`;
+const jsonLd = [
+  organizationSchema(locale),
+  breadcrumb([
+    { name: 'Home', url: SITE.url + '/en' },
+    { name: 'Contact', url: SITE.url + '/en/contact' },
+  ]),
+  { '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Contact Kamp Motion', url: SITE.url + '/en/contact' },
+];
+---
+<BaseLayout {title} {description} {locale} path="/contact" {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Contact</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Let’s Discuss Your Project</h1>
+      <p class="mt-4 text-white/75">A short brief of your needs helps us provide accurate estimates. We typically respond within 1–6 hours on business days.</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 grid gap-6 md:grid-cols-2">
+    <a href={SITE.whatsapp} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
+      <div class="text-2xl">💬</div><div class="mt-3 font-display font-bold">WhatsApp</div>
+      <div class="text-sm text-white/65 mt-1">{SITE.phoneDisplay}</div>
+    </a>
+    <a href={`mailto:${SITE.email}`} class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
+      <div class="text-2xl">✉️</div><div class="mt-3 font-display font-bold">Email</div>
+      <div class="text-sm text-white/65 mt-1">{SITE.email}</div>
+    </a>
+    <a href={SITE.social.instagram} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
+      <div class="text-2xl">📷</div><div class="mt-3 font-display font-bold">Instagram</div>
+      <div class="text-sm text-white/65 mt-1">@kamp_motion</div>
+    </a>
+    <a href={SITE.social.behance} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
+      <div class="text-2xl">🎨</div><div class="mt-3 font-display font-bold">Behance</div>
+      <div class="text-sm text-white/65 mt-1">Full portfolio</div>
+    </a>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="p-6 rounded-2xl bg-[var(--color-ink-2)] border border-[var(--color-line)] text-sm text-white/80">
+      <strong>Studio:</strong> {SITE.address.locality}, {SITE.address.region}, {SITE.address.countryName}.
+      <br/>Available for clients across Indonesia and internationally, fully remote.
+    </div>
+  </section>
+</BaseLayout>

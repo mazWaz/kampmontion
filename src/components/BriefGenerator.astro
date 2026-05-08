@@ -1,0 +1,238 @@
+---
+import { services } from '../data/services';
+import { SITE } from '../config/site';
+import type { Locale } from '../config/site';
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+
+const industries = locale === 'id'
+  ? ['Startup Tech / SaaS', 'Perbankan & Fintech', 'Pendidikan / EdTech', 'Kesehatan', 'NGO / Pemerintah', 'F&B / Retail', 'Korporat Umum', 'Lainnya']
+  : ['Tech Startup / SaaS', 'Banking & Fintech', 'Education / EdTech', 'Healthcare', 'NGO / Government', 'F&B / Retail', 'General Corporate', 'Other'];
+
+const goals = locale === 'id'
+  ? ['Awareness brand', 'Edukasi produk / fitur', 'Konversi penjualan', 'Internal / training', 'Acara / launching', 'Sosial media konten']
+  : ['Brand awareness', 'Product education', 'Sales conversion', 'Internal / training', 'Event / launching', 'Social media content'];
+
+const durations = ['15–30s', '30–60s', '60–90s', '2–3 menit', '3–5 menit'];
+const budgets = locale === 'id'
+  ? ['< Rp 5 juta', 'Rp 5 – 15 juta', 'Rp 15 – 50 juta', '> Rp 50 juta', 'Belum tentu']
+  : ['< IDR 5M (~$320)', 'IDR 5–15M', 'IDR 15–50M', '> IDR 50M', 'Not sure'];
+
+const tt = (id: string, en: string) => locale === 'id' ? id : en;
+---
+<section id="brief" class="relative py-24 md:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between gap-6 mb-12 flex-wrap">
+      <div>
+        <span class="km-eyebrow">06 · {tt('Brief Generator', 'Brief Generator')}</span>
+        <h2 class="km-h1 mt-6 max-w-3xl">
+          {tt(<>Brief profesional. <em>30 detik</em>.</>, <>Pro brief. <em>30 seconds</em>.</>)}
+        </h2>
+        <p class="mt-5 text-white/65 max-w-xl text-lg">
+          {tt(
+            'Pilih opsi, kami susun brief lengkap & estimasi paket — siap kirim ke WhatsApp.',
+            'Pick options, we draft a complete brief with package estimate — ready for WhatsApp.'
+          )}
+        </p>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-5">
+      <form id="km-brief" class="space-y-7 p-8 md:p-10 rounded-3xl bg-[var(--color-ink-2)] border border-[var(--color-line)]">
+        <div>
+          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">{tt('Layanan', 'Service')}</label>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {services.map((s) => (
+              <label class="km-pill">
+                <input type="checkbox" name="service" value={s.title[locale]} class="sr-only" />
+                <span class="km-pill-dot"></span>
+                <span class="text-sm">{s.title[locale]}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-industry">{tt('Industri', 'Industry')}</label>
+            <select id="km-industry" name="industry" class="km-select mt-2">
+              {industries.map((i) => <option value={i}>{i}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-goal">{tt('Tujuan', 'Goal')}</label>
+            <select id="km-goal" name="goal" class="km-select mt-2">
+              {goals.map((g) => <option value={g}>{g}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-duration">{tt('Durasi', 'Duration')}</label>
+            <select id="km-duration" name="duration" class="km-select mt-2">
+              {durations.map((d) => <option value={d}>{d}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-budget">{tt('Budget', 'Budget')}</label>
+            <select id="km-budget" name="budget" class="km-select mt-2">
+              {budgets.map((b) => <option value={b}>{b}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-detail">{tt('Catatan (opsional)', 'Notes (optional)')}</label>
+          <textarea id="km-detail" name="detail" rows="3" class="km-input mt-2" placeholder={tt('Mis: butuh selesai sebelum acara 25 Juni…', 'e.g. needs to be done before June 25 event…')}></textarea>
+        </div>
+
+        <div>
+          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-name">{tt('Nama / Brand', 'Name / Brand')}</label>
+          <input id="km-name" name="name" type="text" class="km-input mt-2" placeholder={tt('Anda / perusahaan', 'You / company')} />
+        </div>
+      </form>
+
+      <aside class="lg:sticky lg:top-24 self-start p-8 md:p-10 rounded-3xl bg-[var(--color-lime)] text-[#0a0a0b]">
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-display uppercase tracking-widest font-bold">{tt('Preview Brief', 'Brief Preview')}</div>
+          <div id="km-brief-counter" class="text-xs font-mono opacity-70">0 / 4</div>
+        </div>
+        <pre id="km-brief-preview" class="mt-5 whitespace-pre-wrap text-sm leading-relaxed font-mono min-h-[280px] text-[#0a0a0b]/85">{tt('Mulai pilih opsi di sebelah kiri…', 'Start by choosing options on the left…')}</pre>
+        <div id="km-brief-estimate" class="mt-5 p-4 rounded-2xl bg-[#0a0a0b] text-white text-sm hidden">
+          <div class="text-[10px] font-display uppercase tracking-widest text-[var(--color-lime)]">{tt('Estimasi paket', 'Estimate')}</div>
+          <div id="km-brief-package" class="mt-1 font-display text-xl font-bold tracking-tight"></div>
+          <div id="km-brief-timeline" class="mt-1 text-white/60 text-xs"></div>
+        </div>
+        <a id="km-brief-send" href="#" target="_blank" rel="noopener" data-magnetic="0.2" data-cursor="link"
+           class="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#0a0a0b] text-white font-medium opacity-50 pointer-events-none transition hover:bg-black">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 17.1-3.8z"/></svg>
+          <span>{tt('Kirim via WhatsApp', 'Send via WhatsApp')}</span>
+        </a>
+        <div class="mt-3 text-xs opacity-60">
+          {tt('Atau salin teks dan kirim ke ', 'Or copy text and send to ')}
+          <a href={`mailto:${SITE.email}`} class="underline">{SITE.email}</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ phone: SITE.phone, locale }}>
+(() => {
+  const form = document.getElementById('km-brief');
+  if (!form) return;
+  const preview = document.getElementById('km-brief-preview');
+  const counter = document.getElementById('km-brief-counter');
+  const estBox = document.getElementById('km-brief-estimate');
+  const estPkg = document.getElementById('km-brief-package');
+  const estTime = document.getElementById('km-brief-timeline');
+  const send = document.getElementById('km-brief-send');
+
+  const T = locale === 'id' ? {
+    placeholder: 'Mulai pilih opsi di sebelah kiri…',
+    title: 'BRIEF PROYEK — KAMP MOTION STUDIO',
+    services: 'Layanan', industry: 'Industri', goal: 'Tujuan', duration: 'Durasi',
+    budget: 'Budget', notes: 'Catatan', name: 'Dari',
+    intro: 'Halo Kamp Motion! Saya tertarik kerja sama, berikut detail kebutuhan saya:',
+    pkgQuick: 'Paket Standar', pkgPremium: 'Paket Premium', pkgEnterprise: 'Paket Enterprise',
+    timeQuick: 'Estimasi 5–10 hari kerja', timeStd: 'Estimasi 2–3 minggu', timeBig: 'Estimasi 4–6 minggu',
+  } : {
+    placeholder: 'Start by choosing options on the left…',
+    title: 'PROJECT BRIEF — KAMP MOTION STUDIO',
+    services: 'Services', industry: 'Industry', goal: 'Goal', duration: 'Duration',
+    budget: 'Budget', notes: 'Notes', name: 'From',
+    intro: 'Hi Kamp Motion! I am interested in working together, here are my project details:',
+    pkgQuick: 'Standard Package', pkgPremium: 'Premium Package', pkgEnterprise: 'Enterprise Package',
+    timeQuick: 'Estimated 5–10 business days', timeStd: 'Estimated 2–3 weeks', timeBig: 'Estimated 4–6 weeks',
+  };
+
+  form.querySelectorAll('.km-pill input').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      cb.parentElement.classList.toggle('on', cb.checked);
+      update();
+    });
+  });
+  form.querySelectorAll('select, textarea, input[type="text"]').forEach((el) => el.addEventListener('input', update));
+
+  function getServices() { return [...form.querySelectorAll('input[name="service"]:checked')].map((i) => i.value); }
+  function pickPackage(budget, services) {
+    const big = ['> Rp 50 juta', '> IDR 50M'];
+    const mid = ['Rp 15 – 50 juta', 'IDR 15–50M'];
+    const sm = ['Rp 5 – 15 juta', 'IDR 5–15M'];
+    if (big.includes(budget) || services.length >= 4) return { name: T.pkgEnterprise, time: T.timeBig };
+    if (mid.includes(budget) || services.length >= 2) return { name: T.pkgPremium, time: T.timeStd };
+    if (sm.includes(budget)) return { name: T.pkgQuick, time: T.timeQuick };
+    return { name: T.pkgQuick, time: T.timeQuick };
+  }
+  function update() {
+    const data = new FormData(form);
+    const svc = getServices();
+    const industry = data.get('industry') || '';
+    const goal = data.get('goal') || '';
+    const duration = data.get('duration') || '';
+    const budget = data.get('budget') || '';
+    const detail = (data.get('detail') || '').trim();
+    const name = (data.get('name') || '').trim();
+
+    const filled = [svc.length > 0, !!industry, !!goal, !!duration].filter(Boolean).length;
+    counter.textContent = `${filled} / 4`;
+
+    if (filled === 0) {
+      preview.textContent = T.placeholder;
+      estBox.classList.add('hidden');
+      send.classList.add('opacity-50', 'pointer-events-none');
+      send.removeAttribute('href'); return;
+    }
+    const lines = [
+      T.title, '─────────────────────', T.intro, '',
+      `• ${T.services}    : ${svc.join(', ') || '—'}`,
+      `• ${T.industry}    : ${industry || '—'}`,
+      `• ${T.goal}        : ${goal || '—'}`,
+      `• ${T.duration}    : ${duration || '—'}`,
+      `• ${T.budget}      : ${budget || '—'}`,
+    ];
+    if (detail) lines.push(`• ${T.notes}      : ${detail}`);
+    if (name) lines.push('', `${T.name}: ${name}`);
+    const text = lines.join('\n');
+    preview.textContent = text;
+
+    if (filled >= 3) {
+      const pkg = pickPackage(budget, svc);
+      estPkg.textContent = pkg.name;
+      estTime.textContent = pkg.time;
+      estBox.classList.remove('hidden');
+      send.href = `https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(text)}`;
+      send.classList.remove('opacity-50', 'pointer-events-none');
+    } else {
+      estBox.classList.add('hidden');
+      send.classList.add('opacity-50', 'pointer-events-none');
+      send.removeAttribute('href');
+    }
+  }
+})();
+</script>
+
+<style is:global>
+  .km-pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .55rem .9rem; border-radius: 9999px;
+    border: 1px solid var(--color-line-strong); background: rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.8); cursor: pointer; transition: all .2s; user-select: none;
+  }
+  .km-pill:hover { border-color: var(--color-lime); color: #fff; }
+  .km-pill-dot {
+    width: 14px; height: 14px; border-radius: 9999px; border: 1.5px solid rgba(255,255,255,0.3);
+    transition: all .2s; display: inline-block; flex-shrink: 0;
+  }
+  .km-pill.on { background: var(--color-lime); border-color: var(--color-lime); color: #0a0a0b; font-weight: 600; }
+  .km-pill.on .km-pill-dot { background: #0a0a0b; border-color: #0a0a0b; box-shadow: inset 0 0 0 3px var(--color-lime); }
+
+  .km-select, .km-input {
+    width: 100%; padding: .75rem 1rem; border-radius: 12px;
+    border: 1px solid var(--color-line-strong); background: rgba(255,255,255,0.03); outline: none;
+    font: 500 14px/1.4 'Inter', system-ui, sans-serif; color: #fff;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .km-select option { background: #0a0a0b; color: #fff; }
+  .km-select:focus, .km-input:focus { border-color: var(--color-lime); box-shadow: 0 0 0 3px rgba(216,242,46,0.15); }
+  .km-input { resize: vertical; }
+  .km-input::placeholder { color: rgba(255,255,255,0.35); }
+</style>

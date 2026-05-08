@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <radialGradient id="g3a" cx="20%" cy="30%" r="55%"><stop offset="0" stop-color="#d8f22e" stop-opacity="0.7"/><stop offset="1" stop-color="#d8f22e" stop-opacity="0"/></radialGradient>
+    <radialGradient id="g3b" cx="80%" cy="70%" r="55%"><stop offset="0" stop-color="#2563eb" stop-opacity="0.6"/><stop offset="1" stop-color="#2563eb" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="#0a0a0b"/>
+  <rect width="800" height="500" fill="url(#g3a)"/>
+  <rect width="800" height="500" fill="url(#g3b)"/>
+  <g font-family="Bricolage Grotesque, Space Grotesk, sans-serif" fill="#fff">
+    <text x="50" y="100" font-size="14" letter-spacing="2.5" opacity="0.7">KINETIC / 03</text>
+    <text x="50" y="270" font-size="64" font-weight="800" letter-spacing="-2">MOTION GRAPHIC</text>
+    <text x="50" y="450" font-size="13" letter-spacing="2" opacity="0.5">KAMP MOTION STUDIO</text>
+  </g>
+</svg>

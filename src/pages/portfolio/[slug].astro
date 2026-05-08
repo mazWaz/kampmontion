@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { projects } from '../../data/portfolio';
+import { SITE } from '../../config/site';
+import { organizationSchema, breadcrumb } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const locale = 'id' as const;
+const title = `${project.title.id} — ${project.category.id}`;
+const description = project.summary.id;
+const url = `${SITE.url}/portfolio/${project.slug}`;
+
+const jsonLd = [
+  organizationSchema(locale),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title.id,
+    description: project.description.id,
+    creator: { '@id': `${SITE.url}#organization` },
+    dateCreated: project.year,
+    image: `${SITE.url}${project.cover}`,
+    url,
+    keywords: project.tags.join(', '),
+  },
+  breadcrumb([
+    { name: 'Beranda', url: SITE.url + '/' },
+    { name: 'Portfolio', url: SITE.url + '/portfolio' },
+    { name: project.title.id, url },
+  ]),
+];
+---
+<BaseLayout {title} {description} {locale} path={`/portfolio/${project.slug}`} ogImage={project.cover} {jsonLd} type="article">
+  <article>
+    <div class="aspect-video bg-neutral-900">
+      <img src={project.cover} alt={project.title.id} class="w-full h-full object-cover" />
+    </div>
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-sm uppercase tracking-wider text-[var(--color-lime)]">{project.category.id} · {project.year}</div>
+      <h1 class="mt-3 font-display text-4xl md:text-5xl font-bold">{project.title.id}</h1>
+      <p class="mt-2 text-white/50">Klien: {project.client}</p>
+      <p class="mt-8 text-lg leading-relaxed text-white/80">{project.description.id}</p>
+      <div class="mt-8 flex flex-wrap gap-2">
+        {project.tags.map((tag) => (
+          <span class="px-3 py-1 text-xs rounded-full bg-[var(--color-ink-3)] border border-[var(--color-line)]">{tag}</span>
+        ))}
+      </div>
+    </div>
+  </article>
+  <CTA locale={locale} />
+</BaseLayout>

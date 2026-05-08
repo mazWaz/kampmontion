@@ -1,0 +1,259 @@
+---
+// Bundled, prefers-reduced-motion aware. ~3KB JS total. No external deps.
+import { services } from '../data/services';
+import { projects } from '../data/portfolio';
+import type { Locale } from '../config/site';
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+
+const cmdItems = [
+  ...services.map((s) => ({
+    label: s.title[locale],
+    href: locale === 'id' ? `/layanan/${s.slug}` : `/en/services/${s.slugEn}`,
+    group: locale === 'id' ? 'Layanan' : 'Services',
+  })),
+  ...projects.map((p) => ({
+    label: p.title[locale],
+    href: locale === 'id' ? `/portfolio/${p.slug}` : `/en/portfolio/${p.slug}`,
+    group: 'Portfolio',
+  })),
+  { label: locale === 'id' ? 'Beranda' : 'Home', href: locale === 'id' ? '/' : '/en', group: 'Nav' },
+  { label: locale === 'id' ? 'Tentang' : 'About', href: locale === 'id' ? '/tentang' : '/en/about', group: 'Nav' },
+  { label: locale === 'id' ? 'Kontak' : 'Contact', href: locale === 'id' ? '/kontak' : '/en/contact', group: 'Nav' },
+];
+---
+<!-- Custom cursor (desktop, fine pointer only) -->
+<div id="km-cursor" aria-hidden="true">
+  <div id="km-cursor-dot"></div>
+  <div id="km-cursor-ring"><span id="km-cursor-label">PLAY</span></div>
+</div>
+
+<!-- Command Palette -->
+<div id="km-cmd" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+  <div id="km-cmd-backdrop"></div>
+  <div id="km-cmd-panel" role="combobox" aria-haspopup="listbox" aria-expanded="true" aria-controls="km-cmd-list">
+    <div id="km-cmd-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="km-cmd-input" type="text" placeholder={locale === 'id' ? 'Cari layanan, portfolio…' : 'Search services, portfolio…'} aria-label="Search" autocomplete="off" />
+      <kbd>ESC</kbd>
+    </div>
+    <ul id="km-cmd-list" role="listbox"></ul>
+    <div id="km-cmd-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> {locale === 'id' ? 'navigasi' : 'navigate'}</span>
+      <span><kbd>↵</kbd> {locale === 'id' ? 'pilih' : 'select'}</span>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ items: cmdItems }}>
+(() => {
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+
+  /* ---------- Custom Cursor ---------- */
+  if (finePointer && !reduceMotion) {
+    const cursor = document.getElementById('km-cursor');
+    const dot = document.getElementById('km-cursor-dot');
+    const ring = document.getElementById('km-cursor-ring');
+    if (cursor && dot && ring) {
+      cursor.classList.add('km-active');
+      let mx = 0, my = 0, dx = 0, dy = 0, rx = 0, ry = 0;
+      addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+      const tick = () => {
+        dx += (mx - dx) * 0.6;
+        dy += (my - dy) * 0.6;
+        rx += (mx - rx) * 0.18;
+        ry += (my - ry) * 0.18;
+        dot.style.transform = `translate(${dx}px, ${dy}px)`;
+        ring.style.transform = `translate(${rx}px, ${ry}px)`;
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      const setMode = (mode) => cursor.dataset.mode = mode;
+      const onMouseOver = (e) => {
+        const t = e.target.closest('[data-cursor]');
+        setMode(t ? t.dataset.cursor : '');
+      };
+      addEventListener('mouseover', onMouseOver);
+      addEventListener('mouseout', () => setMode(''));
+    }
+  }
+
+  /* ---------- Spotlight cards ---------- */
+  document.querySelectorAll('[data-spotlight]').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+
+  /* ---------- Magnetic CTA ---------- */
+  if (!reduceMotion && finePointer) {
+    document.querySelectorAll('[data-magnetic]').forEach((el) => {
+      const strength = parseFloat(el.dataset.magnetic) || 0.3;
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+  }
+
+  /* ---------- Command Palette ---------- */
+  const cmd = document.getElementById('km-cmd');
+  const input = document.getElementById('km-cmd-input');
+  const list = document.getElementById('km-cmd-list');
+  let cursor = 0;
+  let filtered = items;
+
+  const renderList = () => {
+    if (!list) return;
+    list.innerHTML = filtered.map((it, i) => `
+      <li role="option" data-i="${i}" aria-selected="${i === cursor}" class="${i === cursor ? 'active' : ''}">
+        <span class="km-cmd-group">${it.group}</span>
+        <span class="km-cmd-label">${it.label}</span>
+        <span class="km-cmd-arrow">↵</span>
+      </li>`).join('');
+    list.querySelectorAll('li').forEach((li) => {
+      li.addEventListener('click', () => go(parseInt(li.dataset.i)));
+      li.addEventListener('mouseenter', () => { cursor = parseInt(li.dataset.i); renderList(); });
+    });
+  };
+  const go = (i) => { if (filtered[i]) location.href = filtered[i].href; };
+  const open = () => {
+    if (!cmd) return;
+    cmd.hidden = false;
+    requestAnimationFrame(() => cmd.classList.add('open'));
+    input?.focus();
+    cursor = 0;
+    filter('');
+  };
+  const close = () => {
+    if (!cmd) return;
+    cmd.classList.remove('open');
+    setTimeout(() => cmd.hidden = true, 180);
+    if (input) input.value = '';
+  };
+  const filter = (q) => {
+    const ql = q.toLowerCase().trim();
+    filtered = ql ? items.filter((it) => (it.label + it.group).toLowerCase().includes(ql)) : items;
+    cursor = 0;
+    renderList();
+  };
+
+  input?.addEventListener('input', (e) => filter(e.target.value));
+  addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmd.hidden ? open() : close(); return; }
+    if (cmd?.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowDown') { e.preventDefault(); cursor = Math.min(cursor + 1, filtered.length - 1); renderList(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); cursor = Math.max(cursor - 1, 0); renderList(); }
+    if (e.key === 'Enter') { e.preventDefault(); go(cursor); }
+  });
+  document.getElementById('km-cmd-backdrop')?.addEventListener('click', close);
+  document.querySelectorAll('[data-cmd-trigger]').forEach((b) => b.addEventListener('click', open));
+})();
+</script>
+
+<style is:global>
+  /* ---------- Custom Cursor ---------- */
+  #km-cursor { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity .2s; }
+  #km-cursor.km-active { opacity: 1; }
+  #km-cursor-dot, #km-cursor-ring {
+    position: absolute; top: 0; left: 0; pointer-events: none;
+    will-change: transform; transform: translate(-100px, -100px);
+  }
+  #km-cursor-dot {
+    width: 6px; height: 6px; border-radius: 999px; background: #d8f22e;
+    margin: -3px 0 0 -3px;
+  }
+  #km-cursor-ring {
+    width: 32px; height: 32px; border-radius: 999px;
+    border: 1.5px solid rgba(216,242,46,.5);
+    margin: -16px 0 0 -16px;
+    transition: width .25s, height .25s, margin .25s, background .25s, border-color .25s;
+    display: grid; place-items: center;
+    font: 600 9px/1 'Space Grotesk', system-ui, sans-serif; letter-spacing: 1.5px;
+    color: transparent;
+  }
+  #km-cursor-label { transition: color .2s; }
+  #km-cursor[data-mode="play"] #km-cursor-ring {
+    width: 72px; height: 72px; margin: -36px 0 0 -36px;
+    background: #d8f22e; border-color: #d8f22e;
+  }
+  #km-cursor[data-mode="play"] #km-cursor-label { color: #0a0a0b; }
+  #km-cursor[data-mode="play"] #km-cursor-dot { opacity: 0; }
+  #km-cursor[data-mode="link"] #km-cursor-ring { width: 48px; height: 48px; margin: -24px 0 0 -24px; background: rgba(216,242,46,.15); border-color: #d8f22e; }
+  @media (pointer: coarse) { #km-cursor { display: none; } }
+  /* Hide system cursor when active on relevant elements */
+  body:has(#km-cursor.km-active) [data-cursor] { cursor: none; }
+
+  /* ---------- Spotlight cards ---------- */
+  [data-spotlight] {
+    position: relative; isolation: isolate;
+  }
+  [data-spotlight]::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(450px circle at var(--mx, 50%) var(--my, 50%), rgba(216,242,46,.18), transparent 45%);
+    opacity: 0; transition: opacity .3s; z-index: 0;
+  }
+  [data-spotlight]:hover::before { opacity: 1; }
+  [data-spotlight] > * { position: relative; z-index: 1; }
+
+  /* ---------- Magnetic ---------- */
+  [data-magnetic] { transition: transform .25s cubic-bezier(.2,.8,.2,1); will-change: transform; }
+
+  /* ---------- Marquee ---------- */
+  .km-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .km-marquee-track { display: flex; gap: 3rem; animation: kmMarquee 30s linear infinite; width: max-content; }
+  @keyframes kmMarquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .km-marquee-track { animation: none; } }
+
+  /* ---------- Chapter Scroll Indicator ---------- */
+  .km-chapters { position: fixed; right: 1.25rem; top: 50%; transform: translateY(-50%); z-index: 35; display: none; flex-direction: column; gap: .5rem; }
+  @media (min-width: 768px) { .km-chapters { display: flex; } }
+  .km-chapter { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; cursor: pointer; text-decoration: none; padding: .25rem .25rem .25rem 1rem; }
+  .km-chapter-dot { width: 12px; height: 2px; background: rgba(255,255,255,.25); transition: width .3s, background .3s; flex-shrink: 0; }
+  .km-chapter.active .km-chapter-dot { width: 36px; background: #d8f22e; box-shadow: 0 0 12px rgba(216,242,46,.6); }
+  .km-chapter:hover .km-chapter-dot { background: #d8f22e; }
+  .km-chapter-label { font: 600 10px/1 'Bricolage Grotesque','Space Grotesk', system-ui, sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,.7); opacity: 0; transition: opacity .2s; }
+  .km-chapter.active .km-chapter-label, .km-chapter:hover .km-chapter-label { opacity: 1; }
+  .km-chapters[data-theme="dark"] .km-chapter-dot { background: rgba(255,255,255,.3); }
+  .km-chapters[data-theme="dark"] .km-chapter-label { color: rgba(255,255,255,.6); }
+
+  /* ---------- Command Palette ---------- */
+  #km-cmd { position: fixed; inset: 0; z-index: 100; }
+  #km-cmd[hidden] { display: none; }
+  #km-cmd-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(6px); opacity: 0; transition: opacity .18s; }
+  #km-cmd.open #km-cmd-backdrop { opacity: 1; }
+  #km-cmd-panel {
+    position: relative; max-width: 640px; margin: 12vh auto 0; background: #111114;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px; box-shadow: 0 30px 100px rgba(0,0,0,.6);
+    overflow: hidden; transform: translateY(-8px) scale(.98); opacity: 0; transition: all .2s;
+  }
+  #km-cmd.open #km-cmd-panel { transform: translateY(0) scale(1); opacity: 1; }
+  #km-cmd-input-wrap { display: flex; align-items: center; gap: .75rem; padding: 1.1rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.5); }
+  #km-cmd-input { flex: 1; outline: none; border: none; font: 500 16px/1.4 'Inter', system-ui, sans-serif; background: transparent; color: #fff; }
+  #km-cmd-input::placeholder { color: rgba(255,255,255,.3); }
+  #km-cmd-input-wrap kbd, #km-cmd-footer kbd {
+    font: 600 10px/1 'Bricolage Grotesque','Space Grotesk', system-ui, sans-serif; padding: .25rem .4rem;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: 4px; color: rgba(255,255,255,.7);
+  }
+  #km-cmd-list { max-height: 50vh; overflow: auto; padding: .5rem; margin: 0; list-style: none; }
+  #km-cmd-list li {
+    display: grid; grid-template-columns: 90px 1fr auto; gap: .75rem; align-items: center;
+    padding: .7rem .85rem; border-radius: 10px; cursor: pointer;
+    font: 500 14px/1.4 'Inter', system-ui, sans-serif; color: rgba(255,255,255,.85);
+  }
+  #km-cmd-list li.active { background: rgba(216,242,46,.1); color: #d8f22e; }
+  .km-cmd-group { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,.4); font-family: 'Bricolage Grotesque', sans-serif; }
+  #km-cmd-list li.active .km-cmd-group { color: #d8f22e; }
+  .km-cmd-arrow { opacity: 0; font-size: 14px; }
+  #km-cmd-list li.active .km-cmd-arrow { opacity: 1; }
+  #km-cmd-footer { display: flex; gap: 1rem; padding: .8rem 1.25rem; border-top: 1px solid rgba(255,255,255,.08); font-size: 11px; color: rgba(255,255,255,.5); }
+  #km-cmd-footer kbd { margin-right: .25rem; }
+</style>

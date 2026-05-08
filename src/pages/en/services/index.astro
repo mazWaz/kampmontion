@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ServicesGrid from '../../../components/ServicesGrid.astro';
+import CTA from '../../../components/CTA.astro';
+import { SITE } from '../../../config/site';
+import { organizationSchema, breadcrumb, serviceSchema } from '../../../lib/schema';
+
+const locale = 'en' as const;
+const title = 'Motion Graphics, 2D Animation & Video Production Services';
+const description = 'Kamp Motion services: company profile video, 2D animation, motion graphics, video editing, event bumpers, production house, logo animation, and VFX.';
+const jsonLd = [
+  organizationSchema(locale),
+  ...serviceSchema(locale),
+  breadcrumb([
+    { name: 'Home', url: SITE.url + '/en' },
+    { name: 'Services', url: SITE.url + '/en/services' },
+  ]),
+];
+---
+<BaseLayout {title} {description} {locale} path="/services" {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Services</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Complete Visual Solutions</h1>
+      <p class="mt-4 max-w-2xl text-white/70">Eight creative services to help your brand communicate visually — fast, efficient, and high-end — powered by human expertise plus AI.</p>
+    </div>
+  </section>
+  <ServicesGrid locale={locale} />
+  <CTA locale={locale} />
+</BaseLayout>

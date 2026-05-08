@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { projects } from '../../data/portfolio';
+import { SITE } from '../../config/site';
+import { organizationSchema, breadcrumb } from '../../lib/schema';
+
+const locale = 'id' as const;
+const title = 'Portfolio Animasi & Motion Graphic';
+const description = 'Pilihan proyek Kamp Motion Studio: animasi 2D, motion graphic, video company profile, bumper event, logo animation, dan VFX untuk brand lokal dan internasional.';
+const jsonLd = [
+  organizationSchema(locale),
+  breadcrumb([
+    { name: 'Beranda', url: SITE.url + '/' },
+    { name: 'Portfolio', url: SITE.url + '/portfolio' },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title,
+    description,
+    hasPart: projects.map((p) => ({
+      '@type': 'CreativeWork',
+      name: p.title.id,
+      url: `${SITE.url}/portfolio/${p.slug}`,
+    })),
+  },
+];
+---
+<BaseLayout {title} {description} {locale} path="/portfolio" {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Portfolio</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Karya Pilihan</h1>
+      <p class="mt-4 max-w-2xl text-white/70">Kami sudah dipercaya 50+ klien dari berbagai industri. Beberapa karya yang dapat kami tampilkan publik:</p>
+    </div>
+  </section>
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {projects.map((p) => (
+        <a href={`/portfolio/${p.slug}`} data-spotlight data-cursor="play" class="group block rounded-2xl overflow-hidden border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
+          <div class="aspect-video overflow-hidden bg-[var(--color-ink-3)]">
+            <img src={p.cover} alt={p.title.id} class="w-full h-full object-cover group-hover:scale-105 transition" loading="lazy" />
+          </div>
+          <div class="p-5">
+            <div class="text-xs uppercase tracking-wider text-[var(--color-lime)]">{p.category.id} · {p.year}</div>
+            <h2 class="mt-2 font-display font-bold text-lg">{p.title.id}</h2>
+            <p class="mt-1 text-sm text-white/65 line-clamp-2">{p.summary.id}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+  <CTA locale={locale} />
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServicesGrid from '../../components/ServicesGrid.astro';
+import CTA from '../../components/CTA.astro';
+import { SITE } from '../../config/site';
+import { organizationSchema, breadcrumb, serviceSchema } from '../../lib/schema';
+
+const locale = 'id' as const;
+const title = 'Layanan Motion Graphic, Animasi 2D, & Video Produksi';
+const description = 'Layanan kreatif Kamp Motion: video company profile, animasi 2D, motion graphic, editing video, bumper event, production house, logo animation, dan VFX.';
+const jsonLd = [
+  organizationSchema(locale),
+  ...serviceSchema(locale),
+  breadcrumb([
+    { name: 'Beranda', url: SITE.url + '/' },
+    { name: 'Layanan', url: SITE.url + '/layanan' },
+  ]),
+];
+---
+<BaseLayout {title} {description} {locale} path="/layanan" {jsonLd}>
+  <section class="bg-[var(--color-ink-2)] text-white py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Layanan</p>
+      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Solusi Visual Lengkap</h1>
+      <p class="mt-4 max-w-2xl text-white/70">Delapan layanan kreatif untuk membantu brand Anda menyampaikan pesan visual dengan cepat, efisien, dan berkualitas tinggi — didukung kombinasi keahlian manusia dan AI.</p>
+    </div>
+  </section>
+  <ServicesGrid locale={locale} />
+  <CTA locale={locale} />
+</BaseLayout>
