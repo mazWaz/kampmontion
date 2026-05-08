@@ -36,6 +36,7 @@
   let running = true;
   let lastInputAt = 0; // timestamp of last user input (mouse/touch)
   let autoT = 0;       // auto-orbit time accumulator
+  let rafId = null;    // current rAF id; null = no chain running
 
   function resize() {
     w = innerWidth; h = innerHeight;
@@ -71,7 +72,10 @@
   addEventListener('touchstart', onTouch, { passive: true });
   addEventListener('touchmove', onTouch, { passive: true });
   addEventListener('scroll', () => { scrollY = scrollY * 0.7 + (window.scrollY * 0.3); }, { passive: true });
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) loop(); });
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (running && rafId == null) loop();
+  });
 
   // Click / tap ripples
   const spawnRipple = (x, y) => {
@@ -118,10 +122,10 @@
   }
 
   function loop() {
-    if (!running) return;
+    if (!running) { rafId = null; return; }
     tick();
     draw();
-    requestAnimationFrame(loop);
+    rafId = requestAnimationFrame(loop);
   }
 
   resize();
