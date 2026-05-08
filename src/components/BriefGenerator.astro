@@ -115,9 +115,10 @@ const tt = (id: string, en: string) => locale === 'id' ? id : en;
 </section>
 
 <script is:inline define:vars={{ phone: SITE.phone, locale }}>
-(() => {
+function kmBriefInit() {
   const form = document.getElementById('km-brief');
-  if (!form) return;
+  if (!form || form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
   const preview = document.getElementById('km-brief-preview');
   const counter = document.getElementById('km-brief-counter');
   const estBox = document.getElementById('km-brief-estimate');
@@ -318,7 +319,9 @@ const tt = (id: string, en: string) => locale === 'id' ? id : en;
       send.removeAttribute('href');
     }
   }
-})();
+}
+kmBriefInit();
+document.addEventListener('astro:page-load', kmBriefInit);
 </script>
 
 <style is:global>
