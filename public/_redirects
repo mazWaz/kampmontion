@@ -1,0 +1,11 @@
+# Graceful fallback: English-keyword paths without /en/ prefix → redirect to /en/
+# Helps users who manually type the English path expecting it works at root.
+
+/services           /en/services/         301
+/services/*         /en/services/:splat   301
+/portfolio          /en/portfolio/        301
+/portfolio/*        /en/portfolio/:splat  301
+/about              /en/about/            301
+/contact            /en/contact/          301
+/blog               /en/blog/             301
+/blog/*             /en/blog/:splat       301

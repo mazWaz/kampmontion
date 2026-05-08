@@ -7,7 +7,7 @@ const SITE = 'https://kampmotion.com';
 
 export default defineConfig({
   site: SITE,
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
