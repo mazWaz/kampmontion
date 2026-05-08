@@ -23,13 +23,13 @@ const cmdItems = [
 ];
 ---
 <!-- Custom cursor (desktop, fine pointer only) -->
-<div id="km-cursor" aria-hidden="true">
+<div id="km-cursor" aria-hidden="true" transition:persist>
   <div id="km-cursor-dot"></div>
   <div id="km-cursor-ring"><span id="km-cursor-label">PLAY</span></div>
 </div>
 
 <!-- Command Palette -->
-<div id="km-cmd" role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+<div id="km-cmd" role="dialog" aria-modal="true" aria-label="Command palette" hidden transition:persist>
   <div id="km-cmd-backdrop"></div>
   <div id="km-cmd-panel" role="combobox" aria-haspopup="listbox" aria-expanded="true" aria-controls="km-cmd-list">
     <div id="km-cmd-input-wrap">
@@ -47,11 +47,14 @@ const cmdItems = [
 
 <script is:inline define:vars={{ items: cmdItems }}>
 (() => {
+  // Persist root inits across SPA navigations; re-bind per-page elements
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const finePointer = matchMedia('(pointer: fine)').matches;
+  const firstRun = !window.__kmUxInit;
+  window.__kmUxInit = true;
 
-  /* ---------- Custom Cursor ---------- */
-  if (finePointer && !reduceMotion) {
+  /* ---------- Custom Cursor (init once, persists) ---------- */
+  if (firstRun && finePointer && !reduceMotion) {
     const cursor = document.getElementById('km-cursor');
     const dot = document.getElementById('km-cursor-dot');
     const ring = document.getElementById('km-cursor-ring');
@@ -70,35 +73,40 @@ const cmdItems = [
       };
       requestAnimationFrame(tick);
       const setMode = (mode) => cursor.dataset.mode = mode;
-      const onMouseOver = (e) => {
+      addEventListener('mouseover', (e) => {
         const t = e.target.closest('[data-cursor]');
         setMode(t ? t.dataset.cursor : '');
-      };
-      addEventListener('mouseover', onMouseOver);
+      });
       addEventListener('mouseout', () => setMode(''));
     }
   }
 
-  /* ---------- Spotlight cards ---------- */
-  document.querySelectorAll('[data-spotlight]').forEach((el) => {
-    el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      el.style.setProperty('--my', `${e.clientY - r.top}px`);
-    });
-  });
-
-  /* ---------- Magnetic CTA ---------- */
-  if (!reduceMotion && finePointer) {
-    document.querySelectorAll('[data-magnetic]').forEach((el) => {
-      const strength = parseFloat(el.dataset.magnetic) || 0.3;
+  /* ---------- Spotlight + Magnetic (re-bind every page) ---------- */
+  function bindInteractive() {
+    document.querySelectorAll('[data-spotlight]:not([data-spot-bound])').forEach((el) => {
+      el.dataset.spotBound = '1';
       el.addEventListener('mousemove', (e) => {
         const r = el.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
-        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        el.style.setProperty('--my', `${e.clientY - r.top}px`);
       });
-      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+    if (!reduceMotion && finePointer) {
+      document.querySelectorAll('[data-magnetic]:not([data-mag-bound])').forEach((el) => {
+        el.dataset.magBound = '1';
+        const strength = parseFloat(el.dataset.magnetic) || 0.3;
+        el.addEventListener('mousemove', (e) => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+        });
+        el.addEventListener('mouseleave', () => el.style.transform = '');
+      });
+    }
+    document.querySelectorAll('[data-cmd-trigger]:not([data-cmd-bound])').forEach((b) => {
+      b.dataset.cmdBound = '1';
+      b.addEventListener('click', open);
     });
   }
 
@@ -144,17 +152,21 @@ const cmdItems = [
     renderList();
   };
 
-  input?.addEventListener('input', (e) => filter(e.target.value));
-  addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmd.hidden ? open() : close(); return; }
-    if (cmd?.hidden) return;
-    if (e.key === 'Escape') close();
-    if (e.key === 'ArrowDown') { e.preventDefault(); cursor = Math.min(cursor + 1, filtered.length - 1); renderList(); }
-    if (e.key === 'ArrowUp') { e.preventDefault(); cursor = Math.max(cursor - 1, 0); renderList(); }
-    if (e.key === 'Enter') { e.preventDefault(); go(cursor); }
-  });
-  document.getElementById('km-cmd-backdrop')?.addEventListener('click', close);
-  document.querySelectorAll('[data-cmd-trigger]').forEach((b) => b.addEventListener('click', open));
+  if (firstRun) {
+    input?.addEventListener('input', (e) => filter(e.target.value));
+    addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmd.hidden ? open() : close(); return; }
+      if (cmd?.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowDown') { e.preventDefault(); cursor = Math.min(cursor + 1, filtered.length - 1); renderList(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); cursor = Math.max(cursor - 1, 0); renderList(); }
+      if (e.key === 'Enter') { e.preventDefault(); go(cursor); }
+    });
+    document.getElementById('km-cmd-backdrop')?.addEventListener('click', close);
+  }
+
+  bindInteractive();
+  document.addEventListener('astro:page-load', bindInteractive);
 })();
 </script>
 

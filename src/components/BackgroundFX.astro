@@ -1,0 +1,214 @@
+---
+// Full-viewport reactive background + cursor trail. Single canvas, ~5KB JS.
+// Performance: rAF throttled, devicePixelRatio capped, pause when tab hidden,
+// disable on prefers-reduced-motion / coarse pointer.
+---
+<canvas id="km-bgfx" aria-hidden="true" transition:persist></canvas>
+<div id="km-ripple-layer" aria-hidden="true" transition:persist></div>
+
+<script is:inline>
+(() => {
+  if (window.__kmBgfxInit) return; // canvas persists across nav; init once
+  window.__kmBgfxInit = true;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  const canvas = document.getElementById('km-bgfx');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  const isMobile = !fine || matchMedia('(max-width: 768px)').matches;
+  const DPR = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+  const COLOR_DOT = 'rgba(255,255,255,0.10)';
+  const COLOR_DOT_HOT = '216,242,46'; // lime rgb
+  const SPACING = isMobile ? 44 : 36; // looser grid on mobile
+  const RADIUS_BASE = 1;
+  const INFLUENCE = isMobile ? 130 : 160;
+  const TRAIL_MAX = isMobile ? 18 : 30;
+
+  let w = 0, h = 0;
+  let mx = -9999, my = -9999;
+  let lmx = mx, lmy = my;
+  let vx = 0, vy = 0;
+  let scrollY = 0;
+  let trail = [];
+  let dots = [];
+  let running = true;
+  let lastInputAt = 0; // timestamp of last user input (mouse/touch)
+  let autoT = 0;       // auto-orbit time accumulator
+
+  function resize() {
+    w = innerWidth; h = innerHeight;
+    canvas.width = w * DPR;
+    canvas.height = h * DPR;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(DPR, DPR);
+    buildDots();
+  }
+  function buildDots() {
+    dots = [];
+    const cols = Math.ceil(w / SPACING) + 2;
+    const rows = Math.ceil(h / SPACING) + 2;
+    const offX = (w - (cols - 1) * SPACING) / 2;
+    const offY = (h - (rows - 1) * SPACING) / 2;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        dots.push({ x: offX + c * SPACING, y: offY + r * SPACING });
+      }
+    }
+  }
+
+  addEventListener('resize', resize);
+  addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; lastInputAt = performance.now(); });
+  addEventListener('mouseleave', () => { mx = -9999; my = -9999; });
+  // Touch input drives the hot spot on mobile
+  const onTouch = (e) => {
+    const t = e.touches && e.touches[0];
+    if (!t) return;
+    mx = t.clientX; my = t.clientY; lastInputAt = performance.now();
+  };
+  addEventListener('touchstart', onTouch, { passive: true });
+  addEventListener('touchmove', onTouch, { passive: true });
+  addEventListener('scroll', () => { scrollY = scrollY * 0.7 + (window.scrollY * 0.3); }, { passive: true });
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) loop(); });
+
+  // Click / tap ripples
+  const spawnRipple = (x, y) => {
+    const layer = document.getElementById('km-ripple-layer');
+    if (!layer) return;
+    const ripple = document.createElement('span');
+    ripple.className = 'km-ripple';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    layer.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+  };
+  // Ripple only on real click (not on scroll/touch-drag). Works on both desktop
+  // taps and mobile taps because browsers fire `click` after a stationary tap.
+  document.addEventListener('click', (e) => spawnRipple(e.clientX, e.clientY));
+
+  function tick() {
+    autoT += 0.007;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    // Ambient diagonal wave for all viewport sizes — calm, premium, no cursor following.
+    const t = autoT * 0.5;
+    const waveAngle = 0.6;
+    const cosA = Math.cos(waveAngle), sinA = Math.sin(waveAngle);
+    const period = Math.max(w, 600);
+
+    for (let i = 0; i < dots.length; i++) {
+      const d = dots[i];
+      const px = d.x, py = d.y;
+      const proj = (px * cosA + py * sinA);
+      const phase = ((proj / period) + t) % 1;
+      const dPhase = Math.min(phase, 1 - phase);
+      const f = Math.max(0, 1 - dPhase * 6);
+      const alpha = 0.07 + f * 0.45;
+      const r = RADIUS_BASE + f * 1.6;
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fillStyle = f > 0.3 ? `rgba(${COLOR_DOT_HOT},${alpha})` : `rgba(255,255,255,${alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function loop() {
+    if (!running) return;
+    tick();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+
+  if (reduce) {
+    // Static render: just dots, no animation
+    draw();
+  } else {
+    loop();
+  }
+
+  /* ---------- Text Scramble ---------- */
+  const CHARS = '!<>-_\\/[]{}—=+*^?#abcdefghijklmnopqrstuvwxyz0123456789';
+  function scramble(el) {
+    if (reduce) return;
+    const final = el.textContent || '';
+    if (!final.trim()) return;
+    el.dataset.scrambled = '1';
+    const len = final.length;
+    let frame = 0;
+    const total = 28;
+    const start = performance.now();
+    const tickS = (now) => {
+      const p = Math.min(1, (now - start) / 700);
+      frame++;
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        const ch = final[i];
+        if (ch === ' ' || ch === '\n') { out += ch; continue; }
+        const reveal = i / len < p * 1.15;
+        out += reveal ? ch : CHARS[(frame + i) % CHARS.length];
+      }
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(tickS);
+      else el.textContent = final;
+    };
+    requestAnimationFrame(tickS);
+  }
+
+  function initScramble() {
+    document.querySelectorAll('[data-scramble]:not([data-scrambled])').forEach((el) => {
+      // Run only when in viewport
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { scramble(e.target); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.3 });
+      io.observe(el);
+    });
+  }
+  initScramble();
+  document.addEventListener('astro:page-load', initScramble);
+})();
+</script>
+
+<style is:global>
+  #km-bgfx {
+    position: fixed; inset: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0; pointer-events: none;
+    opacity: 0.85;
+  }
+  /* Sit above the body grain noise but below content */
+  body > *:not(#km-bgfx):not(#km-ripple-layer):not(#km-cursor):not(#km-cmd) { position: relative; z-index: 2; }
+
+  #km-ripple-layer { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+  .km-ripple {
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 9999px;
+    border: 2px solid rgba(216,242,46,0.7);
+    transform: translate(-50%, -50%) scale(0);
+    animation: kmRipple .7s cubic-bezier(.2,.8,.2,1) forwards;
+    pointer-events: none;
+  }
+  @keyframes kmRipple {
+    0% { transform: translate(-50%,-50%) scale(0); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(14); opacity: 0; border-width: 1px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .km-ripple { display: none; } }
+
+  /* Velocity-driven cursor ring scale (uses --km-vel set from JS) */
+  #km-cursor-ring {
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), width .25s, height .25s, margin .25s, background .25s, border-color .25s;
+  }
+  /* When velocity high (>20px/frame), elongate slightly */
+  #km-cursor[style*="--km-vel"] #km-cursor-ring {
+    transform: translate(var(--rx,0), var(--ry,0));
+  }
+</style>

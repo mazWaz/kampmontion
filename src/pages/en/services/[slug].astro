@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHero from '../../../components/PageHero.astro';
 import CTA from '../../../components/CTA.astro';
 import { services } from '../../../data/services';
 import { SITE } from '../../../config/site';
@@ -19,7 +20,10 @@ const faqs = [
   { question: `How long does ${service.title.en} production take?`, answer: 'Depends on complexity: 5–14 business days for standard projects, 2–6 weeks for larger or custom work.' },
   { question: `Are revisions included in ${service.title.en}?`, answer: 'Yes, every package includes revisions within the agreed scope. Additional revisions are available pro-rata.' },
   { question: 'Do you serve international clients?', answer: 'Absolutely. We work with both local and international clients via email, WhatsApp, or video call.' },
+  { question: 'How does payment work?', answer: 'Industry standard: 50% upfront upon brief approval, 50% on final delivery. Subscription packages are billed monthly.' },
 ];
+
+const related = services.filter((s) => s.slugEn !== service.slugEn).slice(0, 3);
 
 const jsonLd = [
   organizationSchema(locale),
@@ -43,31 +47,88 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} {locale} path={`/services/${service.slugEn}`} {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Service</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">{service.title.en}</h1>
-      <p class="mt-4 text-lg text-white/75">{service.short.en}</p>
+  <PageHero kicker="Service" title={service.title.en} lead={service.short.en}>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href={SITE.whatsapp} target="_blank" rel="noopener" data-magnetic="0.25" data-cursor="link" class="km-btn-lime">
+        Chat on WhatsApp
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="/en/#brief" data-cursor="link" class="km-btn-ghost">Auto-Generate Brief</a>
+    </div>
+  </PageHero>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16">
+      <article class="order-2 lg:order-1">
+        <h2 class="km-h2">
+          <em>What</em> we deliver
+        </h2>
+        <p class="mt-6 text-lg leading-relaxed text-white/75">{service.long.en}</p>
+      </article>
+
+      <aside class="order-1 lg:order-2 lg:sticky lg:top-24 self-start">
+        <div class="rounded-3xl border border-[var(--color-line)] bg-[var(--color-ink-2)] p-6 md:p-8">
+          <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">What you get</div>
+          <ul class="mt-5 space-y-3">
+            {service.deliverables.en.map((d: string) => (
+              <li class="flex gap-3 text-sm text-white/85 leading-relaxed">
+                <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[var(--color-lime)] grid place-items-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span>{d}</span>
+              </li>
+            ))}
+          </ul>
+          <div class="mt-6 pt-5 border-t border-[var(--color-line)] text-xs text-white/50">
+            Standard estimate 2–3 weeks. Timeline tailored to brief.
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
-  <article class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
-    <p class="text-lg leading-relaxed text-white/80">{service.long.en}</p>
-    <h2 class="mt-12 font-display text-2xl font-bold">What You Get</h2>
-    <ul class="mt-4 space-y-2">
-      {service.deliverables.en.map((d: string) => (
-        <li class="flex gap-2"><span class="text-[var(--color-lime)]">✓</span><span>{d}</span></li>
-      ))}
-    </ul>
-    <h2 class="mt-12 font-display text-2xl font-bold">Frequently Asked Questions</h2>
-    <div class="mt-4 space-y-4">
-      {faqs.map((f) => (
-        <details class="group p-5 rounded-xl border border-[var(--color-line)] bg-[var(--color-ink-2)]">
-          <summary class="cursor-pointer font-semibold">{f.question}</summary>
-          <p class="mt-3 text-white/65">{f.answer}</p>
-        </details>
-      ))}
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <h2 class="km-h2 max-w-2xl">
+        Frequently <em>asked</em>.
+      </h2>
+      <div class="mt-10 grid gap-3 max-w-3xl">
+        {faqs.map((f) => (
+          <details class="group rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)] open:border-[var(--color-lime)]/40 transition">
+            <summary class="cursor-pointer list-none p-5 md:p-6 flex items-center justify-between gap-4 font-display font-semibold text-base md:text-lg">
+              <span>{f.question}</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-line-strong)] grid place-items-center transition group-open:bg-[var(--color-lime)] group-open:border-[var(--color-lime)] group-open:text-[#0a0a0b]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition group-open:rotate-45"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+            </summary>
+            <p class="px-5 md:px-6 pb-5 md:pb-6 text-white/65 leading-relaxed">{f.answer}</p>
+          </details>
+        ))}
+      </div>
     </div>
-  </article>
+  </section>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
+        <h2 class="km-h2 max-w-2xl">
+          Related <em>services</em>.
+        </h2>
+        <a href="/en/services" data-cursor="link" class="km-link text-sm uppercase tracking-widest text-white/60 hover:text-[var(--color-lime)] font-display">All services →</a>
+      </div>
+      <div class="grid gap-4 md:grid-cols-3">
+        {related.map((r) => (
+          <a href={`/en/services/${r.slugEn}`} data-spotlight data-cursor="link" class="km-bento p-6 flex flex-col justify-between min-h-[180px]">
+            <span class="text-3xl">{r.icon}</span>
+            <div>
+              <h3 class="font-display font-bold text-xl tracking-tight">{r.title.en}</h3>
+              <p class="mt-2 text-sm text-white/60 line-clamp-2">{r.short.en}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <CTA locale={locale} />
 </BaseLayout>

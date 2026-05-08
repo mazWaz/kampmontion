@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
 import { SITE } from '../../config/site';
 import { organizationSchema, breadcrumb } from '../../lib/schema';
 
@@ -15,29 +16,62 @@ const jsonLd = [
 ];
 
 const upcoming = [
-  { title: 'Beda Animasi 2D dan Motion Graphic, Mana yang Cocok untuk Brand Anda?', slug: 'beda-animasi-2d-motion-graphic' },
-  { title: 'Cara AI Mempercepat Produksi Video Tanpa Mengorbankan Kualitas', slug: 'ai-mempercepat-produksi-video' },
-  { title: 'Panduan Memilih Jasa Motion Graphic untuk Startup', slug: 'memilih-jasa-motion-graphic-startup' },
-  { title: 'Anatomi Video Company Profile yang Menjual', slug: 'anatomi-video-company-profile' },
+  { title: 'Beda Animasi 2D dan Motion Graphic, Mana yang Cocok untuk Brand Anda?', cat: 'Edukasi', read: '6 menit', slug: 'beda-animasi-2d-motion-graphic' },
+  { title: 'Cara AI Mempercepat Produksi Video Tanpa Mengorbankan Kualitas', cat: 'AI Workflow', read: '8 menit', slug: 'ai-mempercepat-produksi-video' },
+  { title: 'Panduan Memilih Jasa Motion Graphic untuk Startup', cat: 'Panduan', read: '5 menit', slug: 'memilih-jasa-motion-graphic-startup' },
+  { title: 'Anatomi Video Company Profile yang Menjual', cat: 'Strategi', read: '7 menit', slug: 'anatomi-video-company-profile' },
 ];
 ---
 <BaseLayout {title} {description} {locale} path="/blog" {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Blog</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Insight & Inspirasi</h1>
-      <p class="mt-4 max-w-2xl text-white/70">Edukasi dan refleksi dari pengalaman kami menggabungkan kreativitas dengan AI.</p>
+  <PageHero
+    kicker="Blog"
+    title="Insight & *inspirasi* dari studio."
+    lead="Edukasi dan refleksi dari pengalaman kami menggabungkan kreativitas dengan AI. Update bertahap, fokus kualitas."
+  />
+
+  <section class="relative py-12 md:py-16">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <h2 class="font-display font-bold text-2xl md:text-3xl tracking-tight">Akan Datang</h2>
+        <span class="text-xs font-display uppercase tracking-widest text-white/40">{upcoming.length} artikel</span>
+      </div>
+      <ul class="grid gap-3">
+        {upcoming.map((u, i) => (
+          <li>
+            <article class="km-bento p-6 md:p-7 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+              <div class="font-display text-3xl md:text-4xl font-bold text-[var(--color-lime)] tracking-tight w-14 flex-shrink-0">0{i+1}</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-3 text-[10px] font-display uppercase tracking-widest text-white/50">
+                  <span class="text-[var(--color-lime)]">{u.cat}</span>
+                  <span class="w-1 h-1 rounded-full bg-white/30"></span>
+                  <span>{u.read} baca</span>
+                  <span class="w-1 h-1 rounded-full bg-white/30"></span>
+                  <span>Coming soon</span>
+                </div>
+                <h3 class="mt-2 font-display font-bold text-lg md:text-xl tracking-tight leading-snug">{u.title}</h3>
+              </div>
+              <span class="flex-shrink-0 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/40 font-display">
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                Draft
+              </span>
+            </article>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
-  <section class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
-    <h2 class="font-display text-2xl font-bold">Akan Datang</h2>
-    <ul class="mt-6 space-y-3">
-      {upcoming.map((u) => (
-        <li class="p-5 rounded-xl border border-[var(--color-line)] bg-[var(--color-ink-2)]">
-          <span class="text-xs uppercase tracking-wider text-white/40">Coming soon</span>
-          <div class="mt-1 font-display font-bold text-lg">{u.title}</div>
-        </li>
-      ))}
-    </ul>
+
+  <section class="relative py-16 md:py-24 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="km-h2"><em>Update</em> langsung ke inbox.</h2>
+      <p class="mt-5 text-white/65">Daftar dan dapat artikel pertama saat publish — tanpa spam, hanya satu email per artikel.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={`mailto:${SITE.email}?subject=Subscribe%20Blog%20Kamp%20Motion`} data-cursor="link" class="km-btn-lime">
+          Daftar via Email
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href={SITE.social.instagram} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost">Follow Instagram</a>
+      </div>
+    </div>
   </section>
 </BaseLayout>

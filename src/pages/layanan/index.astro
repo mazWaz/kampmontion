@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
 import ServicesGrid from '../../components/ServicesGrid.astro';
 import CTA from '../../components/CTA.astro';
 import { SITE } from '../../config/site';
@@ -18,13 +19,11 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} {locale} path="/layanan" {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Layanan</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Solusi Visual Lengkap</h1>
-      <p class="mt-4 max-w-2xl text-white/70">Delapan layanan kreatif untuk membantu brand Anda menyampaikan pesan visual dengan cepat, efisien, dan berkualitas tinggi — didukung kombinasi keahlian manusia dan AI.</p>
-    </div>
-  </section>
+  <PageHero
+    kicker="Layanan"
+    title="Solusi visual *lengkap* untuk brand modern."
+    lead="Delapan layanan kreatif yang menggabungkan keahlian manusia dengan AI — cepat, presisi, dan tetap punya jiwa."
+  />
   <ServicesGrid locale={locale} />
   <CTA locale={locale} />
 </BaseLayout>

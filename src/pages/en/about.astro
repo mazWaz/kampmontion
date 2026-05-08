@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
 import CTA from '../../components/CTA.astro';
 import Process from '../../components/Process.astro';
 import { team } from '../../data/team';
@@ -16,32 +17,70 @@ const jsonLd = [
     { name: 'About', url: SITE.url + '/en/about' },
   ]),
 ];
+
+const values = [
+  { title: 'Storytelling First', desc: 'Beautiful visuals are wasted without a story. Every project starts from a clear narrative.' },
+  { title: 'AI as Accelerator', desc: 'Not a creator replacement. We use AI to speed up iteration, not to autopilot creativity.' },
+  { title: 'Invisible Details', desc: 'Sound design, motion easing, micro-typography — what your subconscious notices.' },
+  { title: 'No-Nonsense Communication', desc: 'Clear briefs, firm milestones, structured revisions. On-time delivery.' },
+];
 ---
 <BaseLayout {title} {description} {locale} path="/about" {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">About Us</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Where Imagination Comes to Life</h1>
-      <p class="mt-6 text-lg text-white/75">Kamp Motion Studio is an Indonesian creative studio focused on 2D animation, motion graphics, and video production. Since {SITE.founded}, we have supported 50+ local and international brands in telling their visual stories — from tech startups to corporates and NGOs.</p>
-      <p class="mt-4 text-lg text-white/75">We believe combining human creativity with AI delivers work that is faster, sharper, and still has soul.</p>
+  <PageHero
+    kicker="About Us"
+    title="Where *Imagination* Comes to Life."
+    lead={`Kamp Motion Studio is an Indonesian creative studio focused on 2D animation, motion graphics, and video production. Since ${SITE.founded}, we have supported 50+ local and international brands in telling their visual stories.`}
+  />
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+      <h2 class="km-h2">Our <em>story</em>.</h2>
+      <div class="space-y-5 text-lg text-white/75 leading-relaxed">
+        <p>Starting from freelance work on Behance and Fastwork, Kamp Motion grew into a studio of 4 core members and a network of collaborators — videographers, illustrators, voice artists, and sound designers.</p>
+        <p>We believe combining human creativity with AI delivers work that is faster, sharper, and still has soul.</p>
+        <p>Today we serve clients across banking, technology, education, healthcare, NGOs, and government — from Yogyakarta to Indonesia, to the world.</p>
+      </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-    <h2 class="font-display text-3xl md:text-4xl font-bold">Our Team</h2>
-    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {team.map((m) => (
-        <div class="p-6 rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)]">
-          <div class="w-16 h-16 rounded-full bg-[var(--color-lime)] flex items-center justify-center text-[#0a0a0b] font-display font-bold text-2xl">
-            {m.name.charAt(0)}
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="km-h2 max-w-2xl">What we <em>stand for</em>.</h2>
+      <div class="mt-12 grid gap-px bg-[var(--color-line)] border border-[var(--color-line)] rounded-2xl overflow-hidden md:grid-cols-2">
+        {values.map((v, i) => (
+          <div class="bg-[var(--color-ink)] p-8 hover:bg-[var(--color-ink-2)] transition">
+            <div class="font-display text-3xl font-bold text-[var(--color-lime)] tracking-tight">0{i+1}</div>
+            <h3 class="mt-5 font-display font-bold text-xl tracking-tight">{v.title}</h3>
+            <p class="mt-3 text-white/60 leading-relaxed">{v.desc}</p>
           </div>
-          <div class="mt-4 font-display font-bold text-lg">{m.name}</div>
-          <div class="text-sm text-[var(--color-lime)]">{m.role.en}</div>
-          <p class="mt-2 text-sm text-white/65">{m.bio.en}</p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </section>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-6 mb-12 flex-wrap">
+        <h2 class="km-h2 max-w-2xl">Core <em>team</em>.</h2>
+        <span class="text-xs uppercase tracking-widest text-white/40 font-display">Yogyakarta · Indonesia</span>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {team.map((m) => (
+          <div data-spotlight class="km-bento p-6 md:p-7 flex flex-col min-h-[220px]">
+            <div class="w-14 h-14 rounded-2xl bg-[var(--color-lime)] flex items-center justify-center text-[#0a0a0b] font-display font-bold text-2xl">
+              {m.name.charAt(0)}
+            </div>
+            <div class="mt-auto pt-6">
+              <div class="font-display font-bold text-xl tracking-tight">{m.name}</div>
+              <div class="mt-1 text-xs uppercase tracking-widest text-[var(--color-lime)] font-display">{m.role.en}</div>
+              <p class="mt-3 text-sm text-white/60 leading-relaxed">{m.bio.en}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <Process locale={locale} />
   <CTA locale={locale} />
 </BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import { SITE } from '../config/site';
 import { organizationSchema, breadcrumb } from '../lib/schema';
 
@@ -12,50 +13,106 @@ const jsonLd = [
     { name: 'Beranda', url: SITE.url + '/' },
     { name: 'Kontak', url: SITE.url + '/kontak' },
   ]),
+  { '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Kontak Kamp Motion', url: SITE.url + '/kontak' },
+];
+
+const channels = [
   {
-    '@context': 'https://schema.org',
-    '@type': 'ContactPage',
-    name: 'Kontak Kamp Motion',
-    url: SITE.url + '/kontak',
+    label: 'WhatsApp',
+    value: SITE.phoneDisplay,
+    sub: 'Respon 1–6 jam pada hari kerja',
+    href: SITE.whatsapp,
+    external: true,
+    primary: true,
+    svg: '<path d="M22 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 17.1-3.8z"/>',
+  },
+  {
+    label: 'Email',
+    value: SITE.email,
+    sub: 'Untuk brief lengkap & lampiran',
+    href: `mailto:${SITE.email}`,
+    external: false,
+    primary: false,
+    svg: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+  },
+  {
+    label: 'Instagram',
+    value: '@kamp_motion',
+    sub: 'Karya terbaru & behind-the-scenes',
+    href: SITE.social.instagram,
+    external: true,
+    primary: false,
+    svg: '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+  },
+  {
+    label: 'Behance',
+    value: 'umarakbar3b98e',
+    sub: 'Portfolio lengkap & case study',
+    href: SITE.social.behance,
+    external: true,
+    primary: false,
+    svg: '<path d="M2 7h6a3 3 0 1 1 0 6H2zM2 13h7a3 3 0 1 1 0 6H2zM14 9h6M14 14h7c0-2-1.5-4-3.5-4S14 12 14 14z"/>',
   },
 ];
 ---
 <BaseLayout {title} {description} {locale} path="/kontak" {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Kontak</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Mari Diskusikan Proyek Anda</h1>
-      <p class="mt-4 text-white/75">Cerita singkat tentang kebutuhan Anda akan membantu kami memberikan estimasi yang tepat. Respon biasanya dalam 1–6 jam pada hari kerja.</p>
+  <PageHero
+    kicker="Kontak"
+    title="Mari diskusikan *proyek* Anda."
+    lead="Cerita singkat tentang kebutuhan Anda akan membantu kami memberikan estimasi yang tepat. Untuk paling cepat, gunakan WhatsApp."
+  >
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href={SITE.whatsapp} target="_blank" rel="noopener" data-magnetic="0.25" data-cursor="link" class="km-btn-lime">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 17.1-3.8z"/></svg>
+        Chat WhatsApp
+      </a>
+      <a href="/#brief" data-cursor="link" class="km-btn-ghost">Buat Brief Otomatis</a>
+    </div>
+  </PageHero>
+
+  <section class="relative py-12 md:py-16">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-4 sm:grid-cols-2">
+        {channels.map((c) => (
+          <a href={c.href} {...(c.external ? { target: '_blank', rel: 'noopener' } : {})}
+             data-spotlight data-cursor="link"
+             class:list={['km-bento p-6 md:p-8 flex items-start gap-5', c.primary && 'md:col-span-2 sm:col-span-2']}>
+            <span class="flex-shrink-0 w-12 h-12 rounded-2xl border border-[var(--color-line-strong)] grid place-items-center text-[var(--color-lime)] group-hover:bg-[var(--color-lime)] group-hover:text-[#0a0a0b] transition">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={c.svg}></svg>
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">{c.label}</div>
+              <div class="mt-1 font-display font-bold text-xl md:text-2xl tracking-tight truncate">{c.value}</div>
+              <div class="mt-1 text-sm text-white/55">{c.sub}</div>
+            </div>
+            <span class="flex-shrink-0 self-center text-white/40 group-hover:text-[var(--color-lime)] transition">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
-  <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 grid gap-6 md:grid-cols-2">
-    <a href={SITE.whatsapp} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
-      <div class="text-2xl">💬</div>
-      <div class="mt-3 font-display font-bold">WhatsApp</div>
-      <div class="text-sm text-white/65 mt-1">{SITE.phoneDisplay}</div>
-    </a>
-    <a href={`mailto:${SITE.email}`} class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
-      <div class="text-2xl">✉️</div>
-      <div class="mt-3 font-display font-bold">Email</div>
-      <div class="text-sm text-white/65 mt-1">{SITE.email}</div>
-    </a>
-    <a href={SITE.social.instagram} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
-      <div class="text-2xl">📷</div>
-      <div class="mt-3 font-display font-bold">Instagram</div>
-      <div class="text-sm text-white/65 mt-1">@kamp_motion</div>
-    </a>
-    <a href={SITE.social.behance} target="_blank" rel="noopener" class="p-6 rounded-2xl border border-[var(--color-line)] hover:border-[var(--color-lime)] transition">
-      <div class="text-2xl">🎨</div>
-      <div class="mt-3 font-display font-bold">Behance</div>
-      <div class="text-sm text-white/65 mt-1">Lihat portfolio lengkap</div>
-    </a>
-  </section>
-
-  <section class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-20">
-    <div class="p-6 rounded-2xl bg-[var(--color-ink-2)] border border-[var(--color-line)] text-sm text-white/80">
-      <strong>Studio:</strong> {SITE.address.locality}, {SITE.address.region}, {SITE.address.countryName}.
-      <br/>Layanan tersedia untuk klien di seluruh Indonesia dan internasional secara remote.
+  <section class="relative py-12 md:py-16">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="rounded-3xl border border-[var(--color-line)] bg-[var(--color-ink-2)] p-6 md:p-10 grid gap-8 md:grid-cols-3 items-start">
+        <div>
+          <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">Studio</div>
+          <div class="mt-3 font-display font-bold text-2xl tracking-tight">{SITE.address.locality}</div>
+          <div class="mt-1 text-white/60 text-sm">{SITE.address.region}, {SITE.address.countryName}</div>
+        </div>
+        <div>
+          <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">Jam Operasional</div>
+          <div class="mt-3 font-display font-bold text-2xl tracking-tight">09.00 — 18.00 WIB</div>
+          <div class="mt-1 text-white/60 text-sm">Senin–Jumat · Sabtu by appointment</div>
+        </div>
+        <div>
+          <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">Layanan</div>
+          <div class="mt-3 font-display font-bold text-2xl tracking-tight">Indonesia & Internasional</div>
+          <div class="mt-1 text-white/60 text-sm">Kerja remote, on-site by request</div>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

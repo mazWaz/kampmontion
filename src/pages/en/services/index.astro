@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHero from '../../../components/PageHero.astro';
 import ServicesGrid from '../../../components/ServicesGrid.astro';
 import CTA from '../../../components/CTA.astro';
 import { SITE } from '../../../config/site';
@@ -18,13 +19,11 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} {locale} path="/services" {jsonLd}>
-  <section class="bg-[var(--color-ink-2)] text-white py-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <p class="text-sm uppercase tracking-widest text-[var(--color-lime)]">Services</p>
-      <h1 class="mt-3 font-display text-4xl md:text-6xl font-bold">Complete Visual Solutions</h1>
-      <p class="mt-4 max-w-2xl text-white/70">Eight creative services to help your brand communicate visually — fast, efficient, and high-end — powered by human expertise plus AI.</p>
-    </div>
-  </section>
+  <PageHero
+    kicker="Services"
+    title="Complete *visual solutions* for modern brands."
+    lead="Eight creative services blending human expertise with AI — fast, precise, and still soulful."
+  />
   <ServicesGrid locale={locale} />
   <CTA locale={locale} />
 </BaseLayout>

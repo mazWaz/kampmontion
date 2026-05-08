@@ -5,6 +5,7 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import UXEnhancers from '../components/UXEnhancers.astro';
+import BackgroundFX from '../components/BackgroundFX.astro';
 import type { Locale } from '../config/site';
 
 export interface Props {
@@ -31,6 +32,7 @@ const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
     <ClientRouter fallback="swap" />
   </head>
   <body class="min-h-screen flex flex-col">
+    <BackgroundFX />
     <Header locale={locale} currentPath={Astro.url.pathname} />
     <main class="flex-1">
       <slot />

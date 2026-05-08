@@ -15,6 +15,8 @@ const title = `${project.title.id} — ${project.category.id}`;
 const description = project.summary.id;
 const url = `${SITE.url}/portfolio/${project.slug}`;
 
+const related = projects.filter((p) => p.slug !== project.slug).slice(0, 3);
+
 const jsonLd = [
   organizationSchema(locale),
   {
@@ -37,20 +39,67 @@ const jsonLd = [
 ---
 <BaseLayout {title} {description} {locale} path={`/portfolio/${project.slug}`} ogImage={project.cover} {jsonLd} type="article">
   <article>
-    <div class="aspect-video bg-neutral-900">
-      <img src={project.cover} alt={project.title.id} class="w-full h-full object-cover" />
-    </div>
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-sm uppercase tracking-wider text-[var(--color-lime)]">{project.category.id} · {project.year}</div>
-      <h1 class="mt-3 font-display text-4xl md:text-5xl font-bold">{project.title.id}</h1>
-      <p class="mt-2 text-white/50">Klien: {project.client}</p>
-      <p class="mt-8 text-lg leading-relaxed text-white/80">{project.description.id}</p>
-      <div class="mt-8 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <span class="px-3 py-1 text-xs rounded-full bg-[var(--color-ink-3)] border border-[var(--color-line)]">{tag}</span>
-        ))}
+    <section class="relative isolate overflow-hidden">
+      <div class="km-aurora opacity-50"></div>
+      <div class="relative z-[2] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-10">
+        <a href="/portfolio" data-cursor="link" class="km-link inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/60 hover:text-[var(--color-lime)] font-display">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Kembali ke Portfolio
+        </a>
+        <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">
+          <span>{project.category.id}</span>
+          <span class="w-1 h-1 rounded-full bg-white/30"></span>
+          <span>{project.year}</span>
+          <span class="w-1 h-1 rounded-full bg-white/30"></span>
+          <span class="text-white/60">{project.client}</span>
+        </div>
+        <h1 class="km-h1 mt-5">{project.title.id}</h1>
+        <p class="mt-6 max-w-2xl text-lg md:text-xl text-white/70 leading-relaxed">{project.summary.id}</p>
+      </div>
+    </section>
+
+    <div class="relative">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div class="aspect-video rounded-3xl overflow-hidden border border-[var(--color-line)] bg-[var(--color-ink-2)]">
+          <img src={project.cover} alt={project.title.id} class="w-full h-full object-cover" />
+        </div>
       </div>
     </div>
+
+    <section class="relative py-20 md:py-28">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <h2 class="km-h2"><em>Tentang</em> proyek</h2>
+        <p class="mt-6 text-lg leading-relaxed text-white/80">{project.description.id}</p>
+        <div class="mt-10 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span class="px-3 py-1.5 text-xs rounded-full bg-[var(--color-ink-2)] border border-[var(--color-line)] font-display tracking-wide">{tag}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="relative py-16 md:py-24 border-t border-[var(--color-line)]">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
+          <h2 class="km-h2 max-w-2xl">Karya <em>lainnya</em>.</h2>
+          <a href="/portfolio" data-cursor="link" class="km-link text-sm uppercase tracking-widest text-white/60 hover:text-[var(--color-lime)] font-display">Semua karya →</a>
+        </div>
+        <div class="grid gap-5 md:grid-cols-3">
+          {related.map((r) => (
+            <a href={`/portfolio/${r.slug}`} data-spotlight data-cursor="play"
+               class="group block rounded-2xl overflow-hidden border border-[var(--color-line)] hover:border-[var(--color-lime)] bg-[var(--color-ink-2)] transition">
+              <div class="aspect-video overflow-hidden bg-[var(--color-ink-3)]">
+                <img src={r.cover} alt={r.title.id} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+              <div class="p-5">
+                <div class="text-xs uppercase tracking-widest text-[var(--color-lime)] font-display">{r.category.id}</div>
+                <h3 class="mt-2 font-display font-bold text-lg tracking-tight">{r.title.id}</h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   </article>
   <CTA locale={locale} />
 </BaseLayout>
