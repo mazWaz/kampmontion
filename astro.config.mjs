@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+import cloudflare from '@astrojs/cloudflare';
+
 const SITE = 'https://kampmotion.com';
 
 export default defineConfig({
@@ -11,6 +13,7 @@ export default defineConfig({
   build: { format: 'directory', inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
+
   integrations: [
     sitemap({
       i18n: {
@@ -21,9 +24,12 @@ export default defineConfig({
       priority: 0.8,
     }),
   ],
+
   i18n: {
     defaultLocale: 'id',
     locales: ['id', 'en'],
     routing: { prefixDefaultLocale: false },
   },
+
+  adapter: cloudflare(),
 });
