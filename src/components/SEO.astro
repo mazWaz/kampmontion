@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../config/site';
 import type { Locale } from '../config/site';
+import { altLocalePath } from '../lib/paths';
 
 export interface Props {
   title: string;
@@ -25,9 +26,11 @@ const {
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.shortName) ? title : `${title} — ${SITE.name}`;
-const url = new URL(locale === 'id' ? path : `/en${path}`, SITE.url).toString();
-const idUrl = new URL(path, SITE.url).toString();
-const enUrl = new URL(`/en${path}`, SITE.url).toString();
+const currentPath = locale === 'id' ? path : `/en${path}`;
+const otherPath = altLocalePath(currentPath, locale);
+const url = new URL(currentPath, SITE.url).toString();
+const idUrl = new URL(locale === 'id' ? currentPath : otherPath, SITE.url).toString();
+const enUrl = new URL(locale === 'en' ? currentPath : otherPath, SITE.url).toString();
 const ogImageUrl = new URL(ogImage, SITE.url).toString();
 const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
 ---
@@ -52,7 +55,8 @@ const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
 <meta name="theme-color" content="#0a0a0b" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/assets/logo/kamp-motion-3.png" />
+<link rel="apple-touch-icon" href="/assets/logo/kamp-motion-3.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link

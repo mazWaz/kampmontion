@@ -14,7 +14,7 @@ const loop = [...clients, ...clients];
     <div class="km-marquee-track km-client-track">
       {loop.map((c) => (
         <div class="km-client-cell" title={c.name}>
-          <img src={`/assets/clients/${c.slug}.${c.ext}`} alt={c.name} loading="lazy" decoding="async" />
+          <img src={`/assets/clients/${c.slug}.${c.ext}`} alt={c.name} width="320" height="320" loading="lazy" decoding="async" />
         </div>
       ))}
     </div>
@@ -22,26 +22,39 @@ const loop = [...clients, ...clients];
 </section>
 
 <style is:global>
-  .km-client-track { gap: 3rem; align-items: center; }
+  .km-client-track { gap: 2.5rem; align-items: center; }
   .km-client-cell {
     flex: 0 0 auto;
-    width: 140px; height: 60px;
-    display: grid; place-items: center;
-    padding: 6px 12px;
-    opacity: 0.55;
-    transition: opacity .25s, filter .25s, transform .25s;
-    filter: grayscale(1) brightness(2.2) contrast(1);
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 22px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 8px 24px -10px rgba(0,0,0,0.4);
+    transition: transform .25s, box-shadow .25s, background .25s, border-color .25s;
   }
   .km-client-cell:hover {
-    opacity: 1; filter: grayscale(0) brightness(1) contrast(1);
-    transform: scale(1.08);
+    transform: translateY(-2px) scale(1.04);
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(216,242,46,0.6);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.7) inset,
+      0 16px 40px -10px rgba(216,242,46,0.3);
   }
   .km-client-cell img {
-    max-width: 100%; max-height: 100%;
-    width: auto; height: auto; object-fit: contain;
+    height: 36px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
     display: block;
   }
   @media (min-width: 768px) {
-    .km-client-cell { width: 170px; height: 70px; }
+    .km-client-cell { padding: 16px 26px; border-radius: 16px; }
+    .km-client-cell img { height: 48px; max-width: 170px; }
+    .km-client-track { gap: 1.25rem; }
   }
 </style>

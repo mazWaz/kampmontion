@@ -2,11 +2,12 @@
 import { t, localizedPath } from '../i18n/ui';
 import type { Locale } from '../config/site';
 import { SITE } from '../config/site';
+import { altLocalePath } from '../lib/paths';
 
 export interface Props { locale: Locale; currentPath: string }
 const { locale, currentPath } = Astro.props;
 const altLocale: Locale = locale === 'id' ? 'en' : 'id';
-const altPath = altLocale === 'id' ? currentPath.replace(/^\/en/, '') || '/' : `/en${currentPath}`;
+const altPath = altLocalePath(currentPath, locale);
 
 const nav = [
   { key: 'nav.services' as const, href: locale === 'id' ? '/layanan' : '/en/services' },
@@ -19,7 +20,7 @@ const nav = [
 <header class="sticky top-0 z-40 backdrop-blur-md bg-[rgba(10,10,11,0.7)] border-b border-[var(--color-line)]">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
     <a href={localizedPath(locale, '/')} class="flex items-center gap-2.5 group" data-cursor="link" aria-label="Kamp Motion Studio — Home">
-      <img src="/assets/logo/kamp-motion-1.png" alt="Kamp Motion Studio" class="h-7 sm:h-8 w-auto" width="36" height="32" />
+      <img src="/assets/logo/kamp-motion-3.png" alt="Kamp Motion Studio" class="h-7 sm:h-8 w-auto" width="36" height="32" />
       <span class="font-display font-bold tracking-tight text-base sm:text-lg sr-only sm:not-sr-only">
         Kamp <span class="text-[var(--color-lime)]">Motion.</span>
       </span>
@@ -33,13 +34,12 @@ const nav = [
 
     <div class="flex items-center gap-2 sm:gap-3">
       <button data-cmd-trigger type="button"
-        class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--color-line-strong)] hover:border-white/40 text-xs text-white/75 hover:text-white transition"
-        aria-label="Open command palette">
+        class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--color-line-strong)] hover:border-white/40 text-xs text-white/75 hover:text-white transition">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>{locale === 'id' ? 'Cari' : 'Search'}</span>
         <kbd class="ml-1 px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">⌘K</kbd>
       </button>
-      <a href={altPath} class="text-xs uppercase tracking-widest text-white/50 hover:text-[var(--color-lime)] transition" aria-label="Switch language">
+      <a href={altPath} class="text-xs uppercase tracking-widest text-white/50 hover:text-[var(--color-lime)] transition">
         {altLocale.toUpperCase()}
       </a>
       <a href="#brief" data-magnetic="0.25" data-cursor="link"

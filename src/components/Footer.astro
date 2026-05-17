@@ -16,9 +16,18 @@ const year = new Date().getFullYear();
         </div>
         <p class="mt-4 max-w-md text-white/55">{SITE.tagline[locale]}</p>
         <div class="mt-8 flex flex-wrap gap-2">
-          <a href={SITE.social.instagram} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Instagram</a>
-          <a href={SITE.social.behance} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Behance</a>
-          <a href={SITE.social.fastwork} target="_blank" rel="noopener" data-cursor="link" class="km-btn-ghost text-sm py-2 px-4">Fastwork</a>
+          <a href={SITE.social.instagram} target="_blank" rel="noopener" data-cursor="link" aria-label="Instagram Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <span>Instagram</span>
+          </a>
+          <a href={SITE.social.behance} target="_blank" rel="noopener" data-cursor="link" aria-label="Behance Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.799 5.698c.589 0 1.12.051 1.606.156.484.103.9.273 1.252.507.349.235.62.547.813.938.193.39.289.876.289 1.451 0 .619-.141 1.137-.421 1.55-.284.413-.7.751-1.255 1.014.756.218 1.318.6 1.691 1.144.374.544.563 1.198.563 1.962 0 .619-.122 1.15-.36 1.595-.24.444-.564.81-.972 1.094-.408.285-.876.498-1.41.638-.534.139-1.08.21-1.643.21H1V5.698h6.799zm-.43 4.853c.481 0 .878-.115 1.188-.345.31-.23.464-.609.464-1.131 0-.291-.052-.531-.158-.717-.105-.187-.246-.331-.42-.434-.176-.103-.378-.174-.604-.214-.227-.04-.46-.06-.7-.06H3.973v2.901h3.395zm.18 5.099c.275 0 .537-.025.795-.078.255-.052.486-.142.69-.27.205-.128.371-.297.49-.51.121-.213.18-.488.18-.825 0-.681-.198-1.169-.594-1.46-.396-.292-.918-.437-1.564-.437h-3.78v3.58h3.783zm9.84-.025c.398.388.973.582 1.722.582.537 0 1-.135 1.387-.405.385-.27.621-.555.707-.857h2.485c-.397 1.234-1.005 2.115-1.825 2.643-.819.527-1.811.79-2.974.79-.808 0-1.541-.131-2.196-.394-.658-.262-1.214-.628-1.671-1.096-.458-.467-.812-1.024-1.064-1.673-.252-.65-.376-1.36-.376-2.135 0-.748.13-1.443.392-2.087.262-.642.633-1.199 1.114-1.668.482-.469 1.057-.839 1.719-1.106.665-.268 1.402-.402 2.213-.402.908 0 1.7.176 2.373.527.673.351 1.227.823 1.661 1.418.434.594.748 1.27.939 2.029.193.759.262 1.554.211 2.388h-7.642c0 .806.273 1.452.673 1.876.397.422.967.633 1.692.633zm3.149-5.105c-.317-.349-.929-.541-1.519-.541-.387 0-.708.066-.964.198-.256.132-.464.296-.617.493-.156.196-.265.405-.328.626-.062.221-.099.42-.111.595h4.71c-.067-.74-.366-1.225-.683-1.566L20.539 10.520zM15.014 8.245h5.873V6.81h-5.873v1.435z"/></svg>
+            <span>Behance</span>
+          </a>
+          <a href={SITE.social.fastwork} target="_blank" rel="noopener" data-cursor="link" aria-label="Fastwork Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Fastwork</span>
+          </a>
         </div>
       </div>
 

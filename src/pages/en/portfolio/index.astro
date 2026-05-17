@@ -30,7 +30,7 @@ const jsonLd = [
           <a href={`/en/portfolio/${p.slug}`} data-spotlight data-cursor="play"
              class="group block rounded-2xl overflow-hidden border border-[var(--color-line)] hover:border-[var(--color-lime)] bg-[var(--color-ink-2)] transition">
             <div class="aspect-video overflow-hidden bg-[var(--color-ink-3)] relative">
-              <img src={p.cover} alt={p.title.en} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading={i < 3 ? 'eager' : 'lazy'} />
+              <img src={p.cover} alt={p.title.en} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" width="800" height="450" loading={i < 3 ? "eager" : "lazy"} />
               <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur text-[10px] uppercase tracking-widest font-display">
                 {p.year}
               </div>
