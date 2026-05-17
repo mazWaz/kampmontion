@@ -1,22 +1,47 @@
 ---
 import type { Locale } from '../config/site';
+import { clients } from '../data/clients';
 export interface Props { locale: Locale }
 const { locale } = Astro.props;
-const labels = ['Banking', 'Tech Startup', 'EdTech', 'Healthcare', 'NGO', 'Government', 'F&B', 'Retail', 'Fintech', 'SaaS', 'Media', 'Hospitality'];
-const sym = '✦';
+// Duplicate twice for seamless loop
+const loop = [...clients, ...clients];
 ---
-<section class="relative py-12 border-y border-[var(--color-line)] overflow-hidden">
-  <p class="relative z-[2] text-center text-[10px] sm:text-xs font-display uppercase tracking-[0.3em] text-white/60 mb-8 px-4">
-    {locale === 'id' ? '50+ klien · 7 tahun · Indonesia & Internasional' : '50+ clients · 7 years · Indonesia & Worldwide'}
+<section class="relative py-14 md:py-16 border-y border-[var(--color-line)] overflow-hidden">
+  <p class="relative z-[2] text-center text-[10px] sm:text-xs font-display uppercase tracking-[0.3em] text-white/60 mb-10 px-4">
+    {locale === 'id' ? `Dipercaya ${clients.length}+ klien · 7 tahun · Indonesia & Internasional` : `Trusted by ${clients.length}+ clients · 7 years · Indonesia & Worldwide`}
   </p>
   <div class="km-marquee">
-    <div class="km-marquee-track">
-      {[...labels, ...labels].map((l) => (
-        <div class="flex items-center gap-4 px-2">
-          <span class="text-[var(--color-lime)] text-2xl md:text-3xl">{sym}</span>
-          <span class="font-display font-bold text-3xl md:text-5xl text-white/15 hover:text-white transition-colors duration-300 tracking-tight">{l}</span>
+    <div class="km-marquee-track km-client-track">
+      {loop.map((c) => (
+        <div class="km-client-cell" title={c.name}>
+          <img src={`/assets/clients/${c.slug}.${c.ext}`} alt={c.name} loading="lazy" decoding="async" />
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<style is:global>
+  .km-client-track { gap: 3rem; align-items: center; }
+  .km-client-cell {
+    flex: 0 0 auto;
+    width: 140px; height: 60px;
+    display: grid; place-items: center;
+    padding: 6px 12px;
+    opacity: 0.55;
+    transition: opacity .25s, filter .25s, transform .25s;
+    filter: grayscale(1) brightness(2.2) contrast(1);
+  }
+  .km-client-cell:hover {
+    opacity: 1; filter: grayscale(0) brightness(1) contrast(1);
+    transform: scale(1.08);
+  }
+  .km-client-cell img {
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto; object-fit: contain;
+    display: block;
+  }
+  @media (min-width: 768px) {
+    .km-client-cell { width: 170px; height: 70px; }
+  }
+</style>

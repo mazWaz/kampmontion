@@ -57,6 +57,14 @@ const jsonLd = [
     </div>
   </PageHero>
 
+  <div class="relative -mt-4">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="aspect-video rounded-3xl overflow-hidden border border-[var(--color-line)] bg-[var(--color-ink-2)]">
+        <img src={service.image} alt={`${service.title.en} — Kamp Motion Studio`} class="w-full h-full object-cover" loading="eager" />
+      </div>
+    </div>
+  </div>
+
   <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16">
       <article class="order-2 lg:order-1">
@@ -118,9 +126,11 @@ const jsonLd = [
       </div>
       <div class="grid gap-4 md:grid-cols-3">
         {related.map((r) => (
-          <a href={`/en/services/${r.slugEn}`} data-spotlight data-cursor="link" class="km-bento p-6 flex flex-col justify-between min-h-[180px]">
-            <span class="text-3xl">{r.icon}</span>
-            <div>
+          <a href={`/en/services/${r.slugEn}`} data-spotlight data-cursor="link" class="km-bento overflow-hidden flex flex-col">
+            <div class="aspect-video overflow-hidden bg-[var(--color-ink-3)]">
+              <img src={r.image} alt={r.title.en} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+            </div>
+            <div class="p-6">
               <h3 class="font-display font-bold text-xl tracking-tight">{r.title.en}</h3>
               <p class="mt-2 text-sm text-white/60 line-clamp-2">{r.short.en}</p>
             </div>

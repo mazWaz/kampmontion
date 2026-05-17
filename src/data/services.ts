@@ -4,6 +4,7 @@ export type Service = {
   slug: string;
   slugEn: string;
   icon: string;
+  image: string;
   title: Record<Locale, string>;
   short: Record<Locale, string>;
   long: Record<Locale, string>;
@@ -16,6 +17,7 @@ export const services: Service[] = [
     slug: 'video-company-profile',
     slugEn: 'company-profile-video',
     icon: '🎬',
+    image: '/assets/services/video-company-profile.jpg',
     title: { id: 'Video Company Profile', en: 'Company Profile Video' },
     short: {
       id: 'Video profil perusahaan sinematik yang menjual visi, value, dan kredibilitas brand.',
@@ -35,6 +37,7 @@ export const services: Service[] = [
     slug: 'animasi-2d',
     slugEn: '2d-animation',
     icon: '✏️',
+    image: '/assets/services/animasi-2d.png',
     title: { id: 'Animasi 2D', en: '2D Animation' },
     short: {
       id: 'Animasi 2D karakter dan ilustrasi yang storytelling-driven untuk edukasi, iklan, dan eksplainer.',
@@ -54,6 +57,7 @@ export const services: Service[] = [
     slug: 'motion-graphic',
     slugEn: 'motion-graphic',
     icon: '⚡',
+    image: '/assets/services/motion-graphic.jpg',
     title: { id: 'Motion Graphic', en: 'Motion Graphics' },
     short: {
       id: 'Motion graphic dinamis untuk eksplainer, sosial media, dan kampanye marketing.',
@@ -73,6 +77,7 @@ export const services: Service[] = [
     slug: 'editing-video',
     slugEn: 'video-editing',
     icon: '🎞️',
+    image: '/assets/services/editing-video.jpg',
     title: { id: 'Editing Video', en: 'Video Editing' },
     short: {
       id: 'Post-production profesional: color grading, sound design, dan editing dipercepat dengan AI.',
@@ -92,6 +97,7 @@ export const services: Service[] = [
     slug: 'video-bumper-event',
     slugEn: 'event-bumper-video',
     icon: '🎉',
+    image: '/assets/services/video-bumper-event.jpg',
     title: { id: 'Video Bumper Event', en: 'Event Bumper Video' },
     short: {
       id: 'Bumper opening, transisi, dan video countdown event yang spektakuler.',
@@ -111,6 +117,7 @@ export const services: Service[] = [
     slug: 'production-house',
     slugEn: 'production-house',
     icon: '📽️',
+    image: '/assets/services/production-house.jpg',
     title: { id: 'Production House', en: 'Production House' },
     short: {
       id: 'Layanan produksi end-to-end: konsep, syuting, hingga delivery untuk iklan, film pendek, dan brand video.',
@@ -130,6 +137,7 @@ export const services: Service[] = [
     slug: 'logo-animation',
     slugEn: 'logo-animation',
     icon: '✨',
+    image: '/assets/services/logo-animation.png',
     title: { id: 'Logo Animation', en: 'Logo Animation' },
     short: {
       id: 'Animasi logo (logo sting) yang membuat brand Anda hidup dalam 3–8 detik.',
@@ -149,6 +157,7 @@ export const services: Service[] = [
     slug: 'visual-effect',
     slugEn: 'visual-effects',
     icon: '🌀',
+    image: '/assets/services/visual-effect.png',
     title: { id: 'Visual Effect (VFX)', en: 'Visual Effects (VFX)' },
     short: {
       id: 'VFX compositing, green screen, dan AI-generated effects untuk video komersial dan kreatif.',

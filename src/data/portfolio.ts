@@ -24,7 +24,7 @@ export const projects: Project[] = [
     client: 'Confidential Fintech (NDA)',
     category: { id: 'Animasi 2D', en: '2D Animation' },
     year: '2025',
-    cover: '/portfolio/mock-1.svg',
+    cover: '/assets/portfolio/fintech-onboarding-explainer.jpg',
     summary: {
       id: 'Eksplainer 90 detik untuk onboarding pengguna baru aplikasi fintech.',
       en: '90-second explainer for new-user onboarding of a fintech app.',
@@ -44,7 +44,7 @@ export const projects: Project[] = [
     client: 'Banking Sector Client',
     category: { id: 'Video Company Profile', en: 'Company Profile Video' },
     year: '2024',
-    cover: '/portfolio/mock-2.svg',
+    cover: '/assets/portfolio/corporate-profile-banking.jpg',
     summary: {
       id: 'Video company profile sinematik 4 menit untuk peluncuran produk baru.',
       en: 'Cinematic 4-minute corporate profile video for a new product launch.',
@@ -64,7 +64,7 @@ export const projects: Project[] = [
     client: 'International NGO',
     category: { id: 'Motion Graphic', en: 'Motion Graphics' },
     year: '2024',
-    cover: '/portfolio/mock-3.svg',
+    cover: '/assets/portfolio/ngo-campaign-motion.jpg',
     summary: {
       id: 'Seri 6 video motion graphic untuk kampanye kesehatan global.',
       en: 'Series of 6 motion graphic videos for a global health campaign.',
@@ -84,7 +84,7 @@ export const projects: Project[] = [
     client: 'Tech Startup',
     category: { id: 'Video Bumper Event', en: 'Event Bumper Video' },
     year: '2025',
-    cover: '/portfolio/mock-4.svg',
+    cover: '/assets/portfolio/product-launch-bumper.jpg',
     summary: {
       id: 'Bumper opening 20 detik untuk acara peluncuran produk SaaS.',
       en: '20-second opening bumper for a SaaS product launch event.',
@@ -104,7 +104,7 @@ export const projects: Project[] = [
     client: 'EdTech Indonesia',
     category: { id: 'Animasi 2D', en: '2D Animation' },
     year: '2023',
-    cover: '/portfolio/mock-5.svg',
+    cover: '/assets/portfolio/edu-platform-2d-series.png',
     summary: {
       id: '12 video animasi 2D untuk kurikulum SMP daring.',
       en: '12 animated 2D videos for an online junior-high curriculum.',
@@ -124,7 +124,7 @@ export const projects: Project[] = [
     client: 'Multiple Clients',
     category: { id: 'Logo Animation', en: 'Logo Animation' },
     year: '2024',
-    cover: '/portfolio/mock-6.svg',
+    cover: '/assets/portfolio/logo-sting-pack.webp',
     summary: {
       id: 'Lima animasi logo untuk brand startup, NGO, dan korporat.',
       en: 'Five logo animations for startup, NGO, and corporate brands.',
