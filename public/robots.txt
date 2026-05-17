@@ -52,4 +52,4 @@ Allow: /
 User-agent: YouBot
 Allow: /
 
-Sitemap: https://kampmotion.com/sitemap-index.xml
+Sitemap: https://kampmontion.account-021.workers.dev/sitemap-index.xml

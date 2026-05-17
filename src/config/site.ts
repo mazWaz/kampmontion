@@ -1,5 +1,7 @@
 export const SITE = {
-  url: 'https://kampmotion.com',
+  // Live deployment URL. Update to final custom domain when ready;
+  // og:image, canonical, hreflang, sitemap, JSON-LD all derive from this.
+  url: 'https://kampmontion.account-021.workers.dev',
   name: 'Kamp Motion Studio',
   shortName: 'Kamp Motion',
   tagline: {
@@ -27,7 +29,7 @@ export const SITE = {
     sribu: 'https://www.sribu.com/id/users/umarakbar',
   },
   founded: '2018',
-  ogImage: '/og/default.svg',
+  ogImage: '/og/default.png',
 } as const;
 
 export const LOCALES = ['id', 'en'] as const;
