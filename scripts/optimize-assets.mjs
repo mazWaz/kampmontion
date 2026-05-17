@@ -30,14 +30,13 @@ for await (const file of walk(ROOT)) {
   const img = sharp(buf, { failOn: 'none' });
   const meta = await img.metadata();
 
-  // Determine output settings per type — sized to actual on-page usage.
-  // Service cards: max ~600px wide on mobile, ~1100px on desktop bento → cap 1200.
-  // Portfolio: similar usage → 1200.
-  // Client logos: max ~180px displayed → cap 320 for retina.
+  // Determine output settings per type — sized to actual on-page usage (verified via Lighthouse).
+  // Service cards: max ~568px on mobile, ~720px desktop bento → cap 900 for retina headroom.
+  // Client logos: actual render 36-54px @ ~2x DPR → 160 is plenty (Lighthouse: 28×54px displayed).
   // Brand logo: max ~60px displayed → cap 200.
   const isClientLogo = file.includes(path.sep + 'clients' + path.sep);
   const isBrandLogo = file.includes(path.sep + 'logo' + path.sep);
-  const maxW = isClientLogo ? 320 : isBrandLogo ? 200 : 1200;
+  const maxW = isClientLogo ? 160 : isBrandLogo ? 200 : 900;
 
   let pipeline = img;
   if (meta.width && meta.width > maxW) {
