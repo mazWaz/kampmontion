@@ -1,0 +1,9 @@
+// Static Astro site served as Workers static assets. Having this file stops
+// Cloudflare's autoconfig from running `astro add cloudflare`, whose latest
+// adapter needs Astro 7 and broke every build on this Astro 6 project.
+{
+  "name": "kampmontion",
+  "compatibility_date": "2026-11-19",
+  "build": { "command": "npm run build" },
+  "assets": { "directory": "./dist" }
+}
