@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CTA from '../../components/CTA.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
+import ServiceGallery from '../../components/ServiceGallery.astro';
 import { services } from '../../data/services';
 import { SITE } from '../../config/site';
 import { organizationSchema, breadcrumb, faqSchema } from '../../lib/schema';
@@ -93,6 +94,8 @@ const jsonLd = [
       </aside>
     </div>
   </section>
+
+  <ServiceGallery slug={service.slug} title={service.title.id} locale={locale} />
 
   <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
