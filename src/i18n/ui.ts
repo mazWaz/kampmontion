@@ -2,11 +2,9 @@ import type { Locale } from '../config/site';
 
 export const ui = {
   id: {
-    'nav.home': 'Beranda',
     'nav.services': 'Layanan',
     'nav.portfolio': 'Portfolio',
     'nav.about': 'Tentang',
-    'nav.blog': 'Blog',
     'nav.contact': 'Kontak',
     'cta.start': 'Mulai proyek',
     'cta.viewWork': 'Lihat portfolio',
@@ -24,11 +22,9 @@ export const ui = {
     'footer.rights': 'Hak cipta dilindungi.',
   },
   en: {
-    'nav.home': 'Home',
     'nav.services': 'Services',
     'nav.portfolio': 'Portfolio',
     'nav.about': 'About',
-    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'cta.start': 'Start a project',
     'cta.viewWork': 'View portfolio',

@@ -14,7 +14,6 @@ const nav = [
   { key: 'nav.services' as const, href: locale === 'id' ? '/layanan' : '/en/services' },
   { key: 'nav.portfolio' as const, href: localizedPath(locale, '/portfolio') },
   { key: 'nav.about' as const, href: locale === 'id' ? '/tentang' : '/en/about' },
-  { key: 'nav.blog' as const, href: localizedPath(locale, '/blog') },
   { key: 'nav.contact' as const, href: locale === 'id' ? '/kontak' : '/en/contact' },
 ];
 const isCurrent = (href: string) => currentPath.replace(/\/$/, '').startsWith(href);

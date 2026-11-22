@@ -25,7 +25,7 @@ Bilingual (ID/EN), SEO-first, static site untuk Kamp Motion Studio. Dibangun den
 /portfolio/[slug]                Project detail (ID)
 /tentang                         About + team (ID)
 /kontak                          Contact (ID)
-/blog                            Blog skeleton (ID)
+/blog                            Blog skeleton (ID, hidden)
 
 /en                              EN home
 /en/services                     EN services index
@@ -34,7 +34,7 @@ Bilingual (ID/EN), SEO-first, static site untuk Kamp Motion Studio. Dibangun den
 /en/portfolio/[slug]             Project detail (EN)
 /en/about                        About (EN)
 /en/contact                      Contact (EN)
-/en/blog                         Blog skeleton (EN)
+/en/blog                         Blog skeleton (EN, hidden)
 ```
 
 ## Commands
@@ -73,12 +73,10 @@ Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Sett
 
 1. **Domain final** → update `SITE.url` di `src/config/site.ts` + `public/robots.txt` + `public/llms.txt`
 2. **Logo asli** → ganti `public/logo.svg`
-3. **OG image** → ganti `public/og/default.svg` ke PNG/JPG 1200×630
-4. **Aset portfolio asli** → ganti `public/portfolio/mock-*.svg`
-5. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
-6. **Konten blog** → tambah file di `src/content/blog/` (perlu setup content collection)
-7. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
-8. **Google Business Profile** — daftarkan studio Yogyakarta
+3. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
+4. **Blog** → hidden until it has articles: not in the header/footer nav, `noindex`, and filtered out of the sitemap. To bring it back, add the blog link (and a `nav.blog` key in `src/i18n/ui.ts`) to `Header.astro` and `Footer.astro`, drop `noindex` from both blog pages, and remove the sitemap `filter` in `astro.config.mjs`.
+5. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
+6. **Google Business Profile** — daftarkan studio Yogyakarta
 
 ## SEO Checklist Pasca Launch
 

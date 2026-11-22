@@ -30,6 +30,8 @@ export default defineConfig({
   ),
   integrations: [
     sitemap({
+      // Blog is hidden until it has articles.
+      filter: (page) => !/\/blog\/$/.test(page),
       i18n: {
         defaultLocale: 'id',
         locales: { id: 'id-ID', en: 'en-US' },
