@@ -50,8 +50,7 @@ const jsonLd = [
         <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">
           <span>{project.category.en}</span>
           <span class="w-1 h-1 rounded-full bg-white/30"></span>
-          <span>{project.year}</span>
-          <span class="w-1 h-1 rounded-full bg-white/30"></span>
+          {project.year && <><span>{project.year}</span><span class="w-1 h-1 rounded-full bg-white/30"></span></>}
           <span class="text-white/60">{project.client}</span>
         </div>
         <h1 class="km-h1 mt-5">{project.title.en}</h1>

@@ -5,12 +5,29 @@ import tailwindcss from '@tailwindcss/vite';
 
 const SITE = 'https://kampmotion.com';
 
+// Portfolio slugs renamed from placeholder names to the real projects.
+const MOVED_PORTFOLIO = {
+  'fintech-onboarding-explainer': 'upps-me-explainer',
+  'corporate-profile-banking': 'bri-danareksa-sekuritas-opening',
+  'ngo-campaign-motion': 'kadin-for-naker-explainer',
+  'product-launch-bumper': 'tiktok-komdigi-event-bumper',
+  'edu-platform-2d-series': 'united-tractors-teamworking',
+  'logo-sting-pack': 'logo-animation-reel',
+};
+
 export default defineConfig({
   site: SITE,
   trailingSlash: 'ignore',
   build: { format: 'directory', inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
+  // No adapter → built as meta-refresh HTML pages, so this works on any static host.
+  redirects: Object.fromEntries(
+    Object.entries(MOVED_PORTFOLIO).flatMap(([from, to]) => [
+      [`/portfolio/${from}`, `/portfolio/${to}`],
+      [`/en/portfolio/${from}`, `/en/portfolio/${to}`],
+    ]),
+  ),
   integrations: [
     sitemap({
       i18n: {
