@@ -49,7 +49,9 @@ npm run preview  # preview build
 ## Deploy
 
 ### Cloudflare Workers (production)
-Live at https://kampmontion.account-021.workers.dev. Workers Builds deploys every push to `main`; each GitHub commit shows the result as the "Workers Builds: kampmontion" check.
+Live at https://kampmotion.com, served by the `kampmontion` Worker in the Cloudflare account that owns the domain. Workers Builds deploys every push to `main`; each GitHub commit shows the result as the "Workers Builds: kampmontion" check.
+
+Workers Builds settings: build command empty (`wrangler.jsonc` already runs `npm run build`), deploy command `npx wrangler deploy`. The Worker name in the dashboard must be `kampmontion`, the same as `name` in `wrangler.jsonc`.
 
 - `wrangler.jsonc` runs `npm run build` and serves `./dist` as static assets. No adapter or Worker script: the site is fully static.
 - Keep `wrangler.jsonc` in the repo. Without it, Cloudflare's autoconfig runs `astro add cloudflare`, which adds an SSR adapter this static site does not need and breaks the build.
@@ -61,7 +63,7 @@ npx wrangler dev      # serve the build with _headers/_redirects at http://local
 npx wrangler deploy   # manual deploy from local (run `npx wrangler login` first)
 ```
 
-Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Settings → Domains & Routes. Then update the domain in the files from item 1 of "Yang Perlu Diganti Sebelum Live" below, plus `SITE` in `astro.config.mjs` (sitemap).
+Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Settings → Domains & Routes. The domain's zone must be in the same Cloudflare account as the Worker. When the domain changes, update `SITE.url` in `src/config/site.ts` (canonical, hreflang, JSON-LD and sitemap read it), `public/robots.txt` and `public/llms.txt`.
 
 ### Vercel (alternative)
 1. `vercel.com/new` → import the repo (Astro is auto-detected)
@@ -71,19 +73,18 @@ Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Sett
 
 ## Yang Perlu Diganti Sebelum Live
 
-1. **Domain final** → update `SITE.url` di `src/config/site.ts` + `public/robots.txt` + `public/llms.txt`
-2. **Logo asli** → ganti `public/logo.svg`
-3. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
-4. **Blog** → hidden until it has articles: not in the header/footer nav, `noindex`, and filtered out of the sitemap. To bring it back, add the blog link (and a `nav.blog` key in `src/i18n/ui.ts`) to `Header.astro` and `Footer.astro`, drop `noindex` from both blog pages, and remove the sitemap `filter` in `astro.config.mjs`.
-5. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
-6. **Google Business Profile** — daftarkan studio Yogyakarta
+1. **Logo asli** → ganti `public/logo.svg`
+2. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
+3. **Blog** → hidden until it has articles: not in the header/footer nav, `noindex`, and filtered out of the sitemap. To bring it back, add the blog link (and a `nav.blog` key in `src/i18n/ui.ts`) to `Header.astro` and `Footer.astro`, drop `noindex` from both blog pages, and remove the sitemap `filter` in `astro.config.mjs`.
+4. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
+5. **Google Business Profile** — daftarkan studio Yogyakarta
 
 ## SEO Checklist Pasca Launch
 
 - [ ] Submit sitemap ke Google Search Console & Bing
 - [ ] Verifikasi domain di GSC + IndexNow
 - [ ] Setup Google Business Profile
-- [ ] Backlink: tambah link kampmotion.com di Behance, Fastwork, Sribu, Instagram bio
+- [ ] Backlink: tambah link website di Behance, Fastwork, Sribu, Instagram bio
 - [ ] Tambah Google Analytics 4 + GTM (saat dibutuhkan)
 - [ ] Lighthouse audit (target ≥95 semua kategori)
 - [ ] Test Rich Results: https://search.google.com/test/rich-results

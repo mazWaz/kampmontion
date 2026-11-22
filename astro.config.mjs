@@ -2,8 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { SITE as SITE_CONFIG } from './src/config/site.ts';
 
-const SITE = 'https://kampmotion.com';
+// Single source for the domain: canonical, robots and sitemap all agree.
+const SITE = SITE_CONFIG.url;
 
 // Portfolio slugs renamed from placeholder names to the real projects.
 const MOVED_PORTFOLIO = {

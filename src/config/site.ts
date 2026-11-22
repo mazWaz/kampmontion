@@ -1,7 +1,7 @@
 export const SITE = {
-  // Live deployment URL. Update to final custom domain when ready;
+  // Production domain (Cloudflare Workers custom domain).
   // og:image, canonical, hreflang, sitemap, JSON-LD all derive from this.
-  url: 'https://kampmontion.account-021.workers.dev',
+  url: 'https://kampmotion.com',
   name: 'Kamp Motion Studio',
   shortName: 'Kamp Motion',
   tagline: {
