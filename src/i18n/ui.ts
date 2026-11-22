@@ -51,5 +51,6 @@ export function t(locale: Locale, key: UiKey): string {
 
 export function localizedPath(locale: Locale, path: string): string {
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return locale === 'id' ? clean : `/en${clean}`;
+  if (locale === 'id') return clean;
+  return clean === '/' ? '/en' : `/en${clean}`;
 }

@@ -19,7 +19,7 @@ const MOVED_PORTFOLIO = {
 
 export default defineConfig({
   site: SITE,
-  trailingSlash: 'ignore',
+  trailingSlash: 'never', // matches html_handling in wrangler.jsonc and the sitemap URLs
   build: { format: 'directory', inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
   devToolbar: { enabled: false },
@@ -33,7 +33,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Blog is hidden until it has articles.
-      filter: (page) => !/\/blog\/$/.test(page),
+      filter: (page) => !/\/blog\/?$/.test(page),
       i18n: {
         defaultLocale: 'id',
         locales: { id: 'id-ID', en: 'en-US' },

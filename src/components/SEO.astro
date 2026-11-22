@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.shortName) ? title : `${title} — ${SITE.name}`;
-const currentPath = locale === 'id' ? path : `/en${path}`;
+const currentPath = locale === 'id' ? path : path === '/' ? '/en' : `/en${path}`;
 const otherPath = altLocalePath(currentPath, locale);
 const url = new URL(currentPath, SITE.url).toString();
 const idUrl = new URL(locale === 'id' ? currentPath : otherPath, SITE.url).toString();
