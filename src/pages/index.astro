@@ -2,12 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ServicesGrid from '../components/ServicesGrid.astro';
+import SelectedWork from '../components/SelectedWork.astro';
 import Process from '../components/Process.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CTA from '../components/CTA.astro';
-import ClientMarquee from '../components/ClientMarquee.astro';
+import ClientLogos from '../components/ClientLogos.astro';
 import BriefGenerator from '../components/BriefGenerator.astro';
-import ChapterScroll from '../components/ChapterScroll.astro';
 import { SITE } from '../config/site';
 import { organizationSchema, websiteSchema, serviceSchema, breadcrumb } from '../lib/schema';
 
@@ -20,23 +20,14 @@ const jsonLd = [
   ...serviceSchema(locale),
   breadcrumb([{ name: 'Beranda', url: SITE.url + '/' }]),
 ];
-const chapters = [
-  { id: 'intro', label: 'Intro' },
-  { id: 'clients', label: 'Klien' },
-  { id: 'services', label: 'Layanan' },
-  { id: 'process', label: 'Proses' },
-  { id: 'brief', label: 'Brief' },
-  { id: 'voices', label: 'Voices' },
-  { id: 'cta', label: 'Mulai' },
-];
 ---
 <BaseLayout {title} {description} {locale} path="/" {jsonLd}>
-  <ChapterScroll chapters={chapters} theme="dark" />
-  <div id="intro"><Hero locale={locale} /></div>
-  <div id="clients"><ClientMarquee locale={locale} /></div>
-  <div id="services"><ServicesGrid locale={locale} /></div>
-  <div id="process"><Process locale={locale} /></div>
-  <div id="brief"><BriefGenerator locale={locale} /></div>
-  <div id="voices"><Testimonials locale={locale} /></div>
-  <div id="cta"><CTA locale={locale} /></div>
+  <Hero locale={locale} />
+  <ClientLogos locale={locale} />
+  <SelectedWork locale={locale} />
+  <ServicesGrid locale={locale} />
+  <Process locale={locale} />
+  <BriefGenerator locale={locale} />
+  <Testimonials locale={locale} />
+  <CTA locale={locale} />
 </BaseLayout>

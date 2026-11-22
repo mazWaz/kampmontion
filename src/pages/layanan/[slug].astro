@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CTA from '../../components/CTA.astro';
+import Icon from '../../components/Icon.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 import ServiceGallery from '../../components/ServiceGallery.astro';
 import { services } from '../../data/services';
@@ -49,45 +50,43 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} {locale} path={`/layanan/${service.slug}`} {jsonLd}>
-  <PageHero kicker="Layanan" title={service.title.id} lead={service.short.id}>
+  <PageHero back={{ href: '/layanan', label: 'Semua layanan' }} title={service.title.id} lead={service.short.id}>
     <div class="mt-10 flex flex-wrap gap-3">
-      <a href={SITE.whatsapp} target="_blank" rel="noopener" data-magnetic="0.25" data-cursor="link" class="km-btn-lime">
+      <a href={SITE.whatsapp} target="_blank" rel="noopener" class="km-btn-lime">
+        <Icon name="whatsapp" size={18} />
         Diskusi via WhatsApp
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
-      <a href="/#brief" data-cursor="link" class="km-btn-ghost">Buat Brief Otomatis</a>
+      <a href="/#brief" class="km-btn-ghost">Buat brief otomatis</a>
     </div>
   </PageHero>
 
-  <div class="relative -mt-4">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+  <div class="relative">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <VideoEmbed id={service.youtubeId} title={`${service.title.id} — Kamp Motion Studio`} />
     </div>
   </div>
 
   <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16">
       <article class="order-2 lg:order-1">
         <h2 class="km-h2">
-          <em>Apa</em> yang kami kerjakan
+          Apa yang kami kerjakan
         </h2>
         <p class="mt-6 text-lg leading-relaxed text-white/75">{service.long.id}</p>
       </article>
 
       <aside class="order-1 lg:order-2 lg:sticky lg:top-24 self-start">
-        <div class="rounded-3xl border border-[var(--color-line)] bg-[var(--color-ink-2)] p-6 md:p-8">
-          <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">Yang Anda Dapatkan</div>
+        <div class="rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)] p-6 md:p-8">
+          <div class="km-label">Yang Anda dapatkan</div>
           <ul class="mt-5 space-y-3">
             {service.deliverables.id.map((d: string) => (
               <li class="flex gap-3 text-sm text-white/85 leading-relaxed">
-                <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[var(--color-lime)] grid place-items-center">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0a0a0b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                </span>
+                <Icon name="check" size={18} class="mt-0.5 flex-shrink-0 text-[var(--color-lime)]" />
                 <span>{d}</span>
               </li>
             ))}
           </ul>
-          <div class="mt-6 pt-5 border-t border-[var(--color-line)] text-xs text-white/50">
+          <div class="mt-6 pt-5 border-t border-[var(--color-line)] text-sm text-white/65">
             Estimasi standar 2–3 minggu kerja. Detail timeline disesuaikan brief.
           </div>
         </div>
@@ -98,20 +97,20 @@ const jsonLd = [
   <ServiceGallery slug={service.slug} title={service.title.id} locale={locale} />
 
   <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <h2 class="km-h2 max-w-2xl">
-        Pertanyaan <em>umum</em>.
+        Pertanyaan umum.
       </h2>
       <div class="mt-10 grid gap-3 max-w-3xl">
         {faqs.map((f) => (
-          <details class="group rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)] open:border-[var(--color-lime)]/40 transition">
+          <details class="group rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)] open:border-[var(--color-line-strong)] transition-colors">
             <summary class="cursor-pointer list-none p-5 md:p-6 flex items-center justify-between gap-4 font-display font-semibold text-base md:text-lg">
               <span>{f.question}</span>
-              <span class="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-line-strong)] grid place-items-center transition group-open:bg-[var(--color-lime)] group-open:border-[var(--color-lime)] group-open:text-[#0a0a0b]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="transition group-open:rotate-45"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-line-strong)] grid place-items-center transition group-open:border-white/40">
+                <Icon name="plus" size={14} class="transition-transform group-open:rotate-45" />
               </span>
             </summary>
-            <p class="px-5 md:px-6 pb-5 md:pb-6 text-white/65 leading-relaxed">{f.answer}</p>
+            <p class="px-5 md:px-6 pb-5 md:pb-6 text-white/70 leading-relaxed">{f.answer}</p>
           </details>
         ))}
       </div>
@@ -122,19 +121,19 @@ const jsonLd = [
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
         <h2 class="km-h2 max-w-2xl">
-          Layanan <em>terkait</em>.
+          Layanan terkait.
         </h2>
-        <a href="/layanan" data-cursor="link" class="km-link text-sm uppercase tracking-widest text-white/60 hover:text-[var(--color-lime)] font-display">Semua layanan →</a>
+        <a href="/layanan" class="km-link text-sm text-white/70 hover:text-white">Semua layanan</a>
       </div>
-      <div class="grid gap-4 md:grid-cols-3">
+      <div class="grid gap-x-5 gap-y-10 md:grid-cols-3">
         {related.map((r) => (
-          <a href={`/layanan/${r.slug}`} data-spotlight data-cursor="link" class="km-bento overflow-hidden flex flex-col">
-            <div class="aspect-video overflow-hidden bg-[var(--color-ink-3)]">
-              <img src={r.image} alt={r.title.id} class="w-full h-full object-cover transition duration-500 group-hover:scale-105" width="1200" height="675" loading="lazy" />
+          <a href={`/layanan/${r.slug}`} class="group block">
+            <div>
+              <img src={r.image} alt="" class="aspect-video w-full object-cover rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-3)] group-hover:border-[var(--color-lime)] transition-colors" width="1200" height="675" loading="lazy" />
             </div>
-            <div class="p-6">
-              <h3 class="font-display font-bold text-xl tracking-tight">{r.title.id}</h3>
-              <p class="mt-2 text-sm text-white/60 line-clamp-2">{r.short.id}</p>
+            <div class="pt-4">
+              <h3 class="font-display font-bold text-lg tracking-tight group-hover:text-[var(--color-lime)] transition-colors">{r.title.id}</h3>
+              <p class="mt-1 text-sm text-white/65 line-clamp-2">{r.short.id}</p>
             </div>
           </a>
         ))}

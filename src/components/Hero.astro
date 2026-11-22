@@ -1,55 +1,24 @@
 ---
-import { t } from '../i18n/ui';
+import { t, localizedPath } from '../i18n/ui';
 import type { Locale } from '../config/site';
+import WorkReel from './WorkReel.astro';
 export interface Props { locale: Locale }
 const { locale } = Astro.props;
-
-const t1 = locale === 'id' ? 'Where' : 'Where';
-const t2 = locale === 'id' ? 'Imagination' : 'Imagination';
-const t3 = locale === 'id' ? 'Comes' : 'Comes';
-const t4 = locale === 'id' ? 'to Life.' : 'to Life.';
 ---
-<section class="relative isolate overflow-hidden min-h-[92vh] flex items-center">
-  <div class="km-aurora"></div>
-
-  <div class="relative z-[2] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 md:py-32 w-full">
-    <h1 class="km-h1">
-      <span class="block" data-scramble>{t1}</span>
-      <span class="block"><em data-scramble>{t2}</em></span>
-      <span class="block opacity-90"><span data-scramble>{t3}</span> <em data-scramble>{t4}</em></span>
+<section class="relative pt-20 md:pt-28 pb-16 md:pb-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="km-h1 max-w-5xl">
+      {locale === 'id' ? 'Tempat imajinasi menjadi hidup.' : 'Where imagination comes to life.'}
     </h1>
-
-    <div class="mt-12 grid md:grid-cols-[1.6fr_1fr] gap-10 items-end">
-      <p class="text-lg md:text-xl max-w-xl text-white/70 leading-relaxed">
-        {t(locale, 'home.heroLead')}
-      </p>
-
-      <div class="flex flex-wrap gap-3 md:justify-end">
-        <a href="#brief" data-magnetic="0.3" data-cursor="link" class="km-btn-lime">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/></svg>
-          {locale === 'id' ? 'Buat Brief Otomatis' : 'Auto-Generate Brief'}
-        </a>
-        <a href={locale==='id'?'/portfolio':'/en/portfolio'} data-cursor="play" class="km-btn-ghost">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-          {t(locale,'cta.viewWork')}
-        </a>
+    <div class="mt-10 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+      <p class="text-lg md:text-xl max-w-xl text-white/70 leading-relaxed">{t(locale, 'home.heroLead')}</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#brief" class="km-btn-lime">{locale === 'id' ? 'Buat brief otomatis' : 'Auto-generate a brief'}</a>
+        <a href={localizedPath(locale, '/portfolio')} class="km-btn-ghost">{t(locale, 'cta.viewWork')}</a>
       </div>
     </div>
-
-    <dl class="mt-20 grid grid-cols-3 gap-6 max-w-2xl border-t border-[var(--color-line)] pt-8">
-      <div>
-        <dt class="font-display text-4xl md:text-6xl font-bold text-[var(--color-lime)] tracking-tight">7+</dt>
-        <dd class="text-xs uppercase tracking-widest text-white/50 mt-2">{t(locale,'home.statsYears')}</dd>
-      </div>
-      <div>
-        <dt class="font-display text-4xl md:text-6xl font-bold text-[var(--color-lime)] tracking-tight">50+</dt>
-        <dd class="text-xs uppercase tracking-widest text-white/50 mt-2">{t(locale,'home.statsClients')}</dd>
-      </div>
-      <div>
-        <dt class="font-display text-4xl md:text-6xl font-bold text-[var(--color-lime)] tracking-tight">8</dt>
-        <dd class="text-xs uppercase tracking-widest text-white/50 mt-2">{t(locale,'home.statsServices')}</dd>
-      </div>
-    </dl>
   </div>
-
+  <div class="mt-14 md:mt-20">
+    <WorkReel locale={locale} />
+  </div>
 </section>

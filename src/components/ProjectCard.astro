@@ -1,0 +1,15 @@
+---
+import type { Project } from '../data/portfolio';
+import type { Locale } from '../config/site';
+import { localizedPath } from '../i18n/ui';
+
+export interface Props { project: Project; locale: Locale; eager?: boolean; heading?: 'h2' | 'h3'; summary?: boolean }
+const { project: p, locale, eager = false, heading: H = 'h3', summary = false } = Astro.props;
+---
+<a href={localizedPath(locale, `/portfolio/${p.slug}`)} class="group block">
+  <img src={p.cover} alt="" width="1200" height="675" loading={eager ? 'eager' : 'lazy'} decoding="async"
+    class="aspect-video w-full object-cover rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-3)] group-hover:border-[var(--color-lime)] transition-colors" />
+  <H class="mt-4 font-display font-bold text-lg tracking-tight group-hover:text-[var(--color-lime)] transition-colors">{p.title[locale]}</H>
+  <p class="mt-1 text-sm text-white/60">{[p.client, p.category[locale], p.year].filter(Boolean).join(', ')}</p>
+  {summary && <p class="mt-3 text-sm text-white/70 leading-relaxed line-clamp-2">{p.summary[locale]}</p>}
+</a>

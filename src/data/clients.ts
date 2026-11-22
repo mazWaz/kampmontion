@@ -1,17 +1,18 @@
 // Real client logos. Files at /assets/clients/{slug}.{ext}.
 // `name` becomes alt text + tooltip; keep human-readable.
 
-export type Client = { slug: string; name: string; ext: 'png' | 'webp' | 'jpg' };
+// `dark`: light/white logo that disappears on the default light tile.
+export type Client = { slug: string; name: string; ext: 'png' | 'webp' | 'jpg'; dark?: true };
 
 export const clients: Client[] = [
   { slug: '1-abad-nu',                          name: '1 Abad NU',                        ext: 'png' },
   { slug: 'bappenas',                           name: 'Bappenas',                         ext: 'png' },
   { slug: 'bawaslu',                            name: 'Bawaslu',                          ext: 'png' },
-  { slug: 'course-net-indonesia',               name: 'Course-Net Indonesia',             ext: 'png' },
+  { slug: 'course-net-indonesia',               name: 'Course-Net Indonesia',             ext: 'png', dark: true },
   { slug: 'credit-union-madani',                name: 'Credit Union Madani',              ext: 'png' },
-  { slug: 'diana-dewi',                         name: 'Diana Dewi',                       ext: 'png' },
+  { slug: 'diana-dewi',                         name: 'Diana Dewi',                       ext: 'png', dark: true },
   { slug: 'forum-csr',                          name: 'Forum CSR',                        ext: 'png' },
-  { slug: 'futureskills',                       name: 'FutureSkills',                     ext: 'png' },
+  { slug: 'futureskills',                       name: 'FutureSkills',                     ext: 'png', dark: true },
   { slug: 'hlf-msp-iaf',                        name: 'HLF MSP-IAF',                      ext: 'png' },
   { slug: 'indo-intertex',                      name: 'Indo Intertex',                    ext: 'png' },
   { slug: 'itbox',                              name: 'ITBOX',                            ext: 'png' },
@@ -22,7 +23,7 @@ export const clients: Client[] = [
   { slug: 'kemendikdasmen',                     name: 'Kemendikdasmen',                   ext: 'png' },
   { slug: 'kemen-pmk',                          name: 'Kemenko PMK',                      ext: 'png' },
   { slug: 'kitatama',                           name: 'Kitatama',                         ext: 'png' },
-  { slug: 'komdigi',                            name: 'Komdigi',                          ext: 'png' },
+  { slug: 'komdigi',                            name: 'Komdigi',                          ext: 'png', dark: true },
   { slug: 'kormi',                              name: 'KORMI',                            ext: 'webp' },
   { slug: 'kpu',                                name: 'KPU',                              ext: 'png' },
   { slug: 'mandiri',                            name: 'Mandiri',                          ext: 'png' },
@@ -32,7 +33,7 @@ export const clients: Client[] = [
   { slug: 'pegadaian',                          name: 'Pegadaian',                        ext: 'png' },
   { slug: 'pertamina-hulu-energi',              name: 'Pertamina Hulu Energi',            ext: 'png' },
   { slug: 'pijar-foundation',                   name: 'Pijar Foundation',                 ext: 'png' },
-  { slug: 'pln',                                name: 'PLN',                              ext: 'png' },
+  { slug: 'pln',                                name: 'PLN',                              ext: 'png', dark: true },
   { slug: 'pusaka-jawa-ugm',                    name: 'Pusaka Jawa UGM',                  ext: 'png' },
   { slug: 'sgh',                                name: 'SGH',                              ext: 'webp' },
   { slug: 'social-impact',                      name: 'Social Impact',                    ext: 'png' },
@@ -41,6 +42,6 @@ export const clients: Client[] = [
   { slug: 'ugm',                                name: 'UGM',                              ext: 'png' },
   { slug: 'united-tractors',                    name: 'United Tractors',                  ext: 'png' },
   { slug: 'universitas-nahdlatul-ulama-surabaya', name: 'UNUSA',                          ext: 'png' },
-  { slug: 'unu-jogja',                          name: 'UNU Jogja',                        ext: 'png' },
+  { slug: 'unu-jogja',                          name: 'UNU Jogja',                        ext: 'png', dark: true },
   { slug: 'wika-gedung',                        name: 'Wika Gedung',                      ext: 'png' },
 ];

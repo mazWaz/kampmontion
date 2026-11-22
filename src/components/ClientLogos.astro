@@ -1,0 +1,21 @@
+---
+import { clients } from '../data/clients';
+import type { Locale } from '../config/site';
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+<section class="relative py-16 md:py-20 border-y border-[var(--color-line)]">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h2 class="km-label">
+      {locale === 'id' ? `${clients.length} klien yang pernah bekerja dengan kami` : `${clients.length} clients we have worked with`}
+    </h2>
+    <ul class="mt-8 grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-8 gap-2 sm:gap-3">
+      {clients.map((c) => (
+        <li class:list={['grid place-items-center h-14 sm:h-16 md:h-20 px-2 sm:px-3 rounded-lg', c.dark ? 'bg-[var(--color-ink-3)] border border-[var(--color-line)]' : 'bg-white/90']}>
+          <img src={`/assets/clients/${c.slug}.${c.ext}`} alt={c.name} title={c.name} width="320" height="320" loading="lazy" decoding="async"
+            class="max-h-8 sm:max-h-9 md:max-h-11 w-auto max-w-full object-contain" />
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

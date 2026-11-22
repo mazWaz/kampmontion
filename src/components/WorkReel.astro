@@ -1,0 +1,93 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { services } from '../data/services';
+import type { Locale } from '../config/site';
+import Icon from './Icon.astro';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+
+// Frames from real client work (src/assets/gallery/<service>/<file>), all 16:9, mixed across services.
+const FRAMES = [
+  'video-bumper-event/02 TikTok x Komdigi.jpg',
+  'motion-graphic/02 Kadin for Naker.jpg',
+  'video-company-profile/02 UNUSA.jpg',
+  'animasi-2d/03 United Tractors - The Power of Teamworking.jpg',
+  'visual-effect/03 Future Talent Hub.jpg',
+  'motion-graphic/01 The Museum of Islam.jpg',
+  'video-bumper-event/03 Tokopedia x TikTok Shop.jpg',
+  'logo-animation/02 WIKA Gedung.jpg',
+  'animasi-2d/01 Upps.me.jpg',
+  'motion-graphic/03 Indonesia-MENA Expert Exchange.jpg',
+  'video-bumper-event/01 WIKA Gedung CEO Talk 2024.jpg',
+  'editing-video/01 Course-Net Indonesia.jpg',
+];
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/gallery/*/*.jpg', { eager: true });
+const frames = FRAMES.map((key) => {
+  const [slug, file] = key.split('/');
+  const svc = services.find((s) => s.slug === slug)!;
+  return {
+    img: files[`../assets/gallery/${key}`].default,
+    project: file.replace(/^\d+ /, '').replace(/\.jpg$/, ''),
+    service: svc.title[locale],
+    href: locale === 'id' ? `/layanan/${svc.slug}` : `/en/services/${svc.slugEn}`,
+  };
+});
+const pauseLabel = locale === 'id' ? 'Jeda gerakan' : 'Pause motion';
+---
+<div class="km-reel-wrap">
+  <div class="km-reel" role="region" aria-label={locale === 'id' ? 'Cuplikan karya klien' : 'Client work stills'}>
+    <ul class="km-reel-track">
+      {[0, 1].map((copy) => frames.map((f, i) => (
+        <li class:list={['km-reel-frame', copy === 1 && 'km-reel-dup']} aria-hidden={copy === 1 ? 'true' : undefined}>
+          <a href={f.href} tabindex={copy === 1 ? -1 : undefined} class="group block">
+            <Image src={f.img} alt={`${f.project} — ${f.service}`} widths={[480, 960]} sizes="(min-width: 768px) 34vw, 78vw"
+              loading={copy === 0 && i < 4 ? 'eager' : 'lazy'}
+              class="aspect-video w-full object-cover rounded-2xl border border-[var(--color-line)] group-hover:border-[var(--color-lime)] transition-colors" />
+            <span class="mt-3 block text-sm font-medium text-white">{f.project}</span>
+            <span class="block text-sm text-white/60">{f.service}</span>
+          </a>
+        </li>
+      )))}
+    </ul>
+  </div>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
+    <button type="button" data-reel-toggle aria-pressed="false"
+      class="km-reel-toggle inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors">
+      <Icon name="pause" size={16} class="km-reel-ico-pause" />
+      <Icon name="play" size={16} class="km-reel-ico-play" />
+      <span>{pauseLabel}</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // WCAG 2.2.2: auto-moving content needs a pause control that also works on touch.
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>('[data-reel-toggle]');
+    if (!btn) return;
+    const paused = btn.getAttribute('aria-pressed') !== 'true';
+    btn.setAttribute('aria-pressed', String(paused));
+    btn.closest('.km-reel-wrap')?.classList.toggle('is-paused', paused);
+  });
+</script>
+
+<style is:global>
+  .km-reel { overflow: hidden; padding-inline: 1rem; }
+  @media (min-width: 640px) { .km-reel { padding-inline: 1.5rem; } }
+  .km-reel-track { display: flex; gap: 1rem; width: max-content; margin: 0; padding: 0; list-style: none; animation: kmReel 90s linear infinite; }
+  .km-reel-frame { width: clamp(260px, 34vw, 480px); flex: none; }
+  .km-reel:hover .km-reel-track, .km-reel:focus-within .km-reel-track, .km-reel-wrap.is-paused .km-reel-track { animation-play-state: paused; }
+  /* Track holds two identical sets; shifting by one set plus one gap loops seamlessly. */
+  @keyframes kmReel { to { transform: translateX(calc(-50% - .5rem)); } }
+  .km-reel-ico-play, .km-reel-toggle[aria-pressed="true"] .km-reel-ico-pause { display: none; }
+  .km-reel-toggle[aria-pressed="true"] .km-reel-ico-play { display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .km-reel { overflow-x: auto; scroll-snap-type: x mandatory; }
+    .km-reel-frame { scroll-snap-align: start; }
+    .km-reel-track { animation: none; }
+    .km-reel-dup, .km-reel-toggle { display: none; }
+  }
+</style>

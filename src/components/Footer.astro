@@ -2,67 +2,76 @@
 import { t, localizedPath } from '../i18n/ui';
 import type { Locale } from '../config/site';
 import { SITE } from '../config/site';
+import { services } from '../data/services';
+import Icon from './Icon.astro';
 export interface Props { locale: Locale }
 const { locale } = Astro.props;
 const year = new Date().getFullYear();
+const id = locale === 'id';
+
+const social = [
+  { href: SITE.social.instagram, label: 'Instagram', icon: 'instagram' },
+  { href: SITE.social.behance, label: 'Behance', icon: 'behance' },
+  { href: SITE.social.fastwork, label: 'Fastwork', icon: 'bolt' },
+];
+const studio = [
+  { href: id ? '/tentang' : '/en/about', label: t(locale, 'nav.about') },
+  { href: localizedPath(locale, '/portfolio'), label: t(locale, 'nav.portfolio') },
+  { href: localizedPath(locale, '/blog'), label: t(locale, 'nav.blog') },
+  { href: id ? '/kontak' : '/en/contact', label: t(locale, 'nav.contact') },
+];
+const linkClass = 'km-link text-white/70 hover:text-white';
 ---
-<footer class="relative border-t border-[var(--color-line)] mt-20 overflow-hidden">
-  <div class="km-aurora opacity-30"></div>
-  <div class="relative z-[2] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
-    <div class="grid gap-10 md:grid-cols-12">
-      <div class="md:col-span-5">
+<footer class="border-t border-[var(--color-line)] mt-20">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
+    <div class="grid gap-12 md:grid-cols-12">
+      <div class="md:col-span-4">
         <div class="font-display text-5xl md:text-7xl font-bold tracking-tight">
           Kamp <span class="text-[var(--color-lime)]">Motion.</span>
         </div>
-        <p class="mt-4 max-w-md text-white/55">{SITE.tagline[locale]}</p>
-        <div class="mt-8 flex flex-wrap gap-2">
-          <a href={SITE.social.instagram} target="_blank" rel="noopener" data-cursor="link" aria-label="Instagram Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            <span>Instagram</span>
-          </a>
-          <a href={SITE.social.behance} target="_blank" rel="noopener" data-cursor="link" aria-label="Behance Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.799 5.698c.589 0 1.12.051 1.606.156.484.103.9.273 1.252.507.349.235.62.547.813.938.193.39.289.876.289 1.451 0 .619-.141 1.137-.421 1.55-.284.413-.7.751-1.255 1.014.756.218 1.318.6 1.691 1.144.374.544.563 1.198.563 1.962 0 .619-.122 1.15-.36 1.595-.24.444-.564.81-.972 1.094-.408.285-.876.498-1.41.638-.534.139-1.08.21-1.643.21H1V5.698h6.799zm-.43 4.853c.481 0 .878-.115 1.188-.345.31-.23.464-.609.464-1.131 0-.291-.052-.531-.158-.717-.105-.187-.246-.331-.42-.434-.176-.103-.378-.174-.604-.214-.227-.04-.46-.06-.7-.06H3.973v2.901h3.395zm.18 5.099c.275 0 .537-.025.795-.078.255-.052.486-.142.69-.27.205-.128.371-.297.49-.51.121-.213.18-.488.18-.825 0-.681-.198-1.169-.594-1.46-.396-.292-.918-.437-1.564-.437h-3.78v3.58h3.783zm9.84-.025c.398.388.973.582 1.722.582.537 0 1-.135 1.387-.405.385-.27.621-.555.707-.857h2.485c-.397 1.234-1.005 2.115-1.825 2.643-.819.527-1.811.79-2.974.79-.808 0-1.541-.131-2.196-.394-.658-.262-1.214-.628-1.671-1.096-.458-.467-.812-1.024-1.064-1.673-.252-.65-.376-1.36-.376-2.135 0-.748.13-1.443.392-2.087.262-.642.633-1.199 1.114-1.668.482-.469 1.057-.839 1.719-1.106.665-.268 1.402-.402 2.213-.402.908 0 1.7.176 2.373.527.673.351 1.227.823 1.661 1.418.434.594.748 1.27.939 2.029.193.759.262 1.554.211 2.388h-7.642c0 .806.273 1.452.673 1.876.397.422.967.633 1.692.633zm3.149-5.105c-.317-.349-.929-.541-1.519-.541-.387 0-.708.066-.964.198-.256.132-.464.296-.617.493-.156.196-.265.405-.328.626-.062.221-.099.42-.111.595h4.71c-.067-.74-.366-1.225-.683-1.566L20.539 10.520zM15.014 8.245h5.873V6.81h-5.873v1.435z"/></svg>
-            <span>Behance</span>
-          </a>
-          <a href={SITE.social.fastwork} target="_blank" rel="noopener" data-cursor="link" aria-label="Fastwork Kamp Motion" class="km-btn-ghost text-sm py-2 px-4">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <span>Fastwork</span>
-          </a>
-        </div>
+        <p class="mt-4 max-w-md text-white/65">{SITE.tagline[locale]}</p>
+        <ul class="mt-8 flex flex-wrap gap-2">
+          {social.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener" class="km-btn-ghost text-sm py-2 px-4">
+                <Icon name={s.icon} size={16} />
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <nav class="md:col-span-3" aria-labelledby="ft-services">
+        <h2 id="ft-services" class="km-label mb-4">
+          <a href={id ? '/layanan' : '/en/services'} class="hover:text-white">{t(locale, 'nav.services')}</a>
+        </h2>
+        <ul class="space-y-2.5 text-sm">
+          {services.map((s) => (
+            <li><a class={linkClass} href={id ? `/layanan/${s.slug}` : `/en/services/${s.slugEn}`}>{s.title[locale]}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="md:col-span-2" aria-labelledby="ft-studio">
+        <h2 id="ft-studio" class="km-label mb-4">Studio</h2>
+        <ul class="space-y-2.5 text-sm">
+          {studio.map((l) => <li><a class={linkClass} href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
 
       <div class="md:col-span-3">
-        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{t(locale,'nav.services')}</div>
+        <h2 class="km-label mb-4">{id ? 'Hubungi' : 'Get in touch'}</h2>
         <ul class="space-y-2.5 text-sm">
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/video-company-profile':'/en/services/company-profile-video'}>Company Profile</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/animasi-2d':'/en/services/2d-animation'}>2D Animation</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/motion-graphic':'/en/services/motion-graphic'}>Motion Graphic</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/layanan/visual-effect':'/en/services/visual-effects'}>VFX</a></li>
-        </ul>
-      </div>
-
-      <div class="md:col-span-2">
-        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{locale==='id'?'Studio':'Studio'}</div>
-        <ul class="space-y-2.5 text-sm">
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={locale==='id'?'/tentang':'/en/about'}>{t(locale,'nav.about')}</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={localizedPath(locale,'/portfolio')}>{t(locale,'nav.portfolio')}</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={localizedPath(locale,'/blog')}>{t(locale,'nav.blog')}</a></li>
-        </ul>
-      </div>
-
-      <div class="md:col-span-2">
-        <div class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)] mb-4">{t(locale,'nav.contact')}</div>
-        <ul class="space-y-2.5 text-sm">
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
-          <li><a class="km-link text-white/70 hover:text-white" data-cursor="link" href={SITE.whatsapp} target="_blank" rel="noopener">{SITE.phoneDisplay}</a></li>
-          <li class="text-white/50">{SITE.address.locality}, {SITE.address.countryName}</li>
+          <li><a class={linkClass} href={SITE.whatsapp} target="_blank" rel="noopener">{SITE.phoneDisplay}</a></li>
+          <li><a class={linkClass} href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li class="text-white/60">{SITE.address.locality}, {SITE.address.countryName}</li>
         </ul>
       </div>
     </div>
 
-    <div class="mt-16 pt-6 border-t border-[var(--color-line)] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/55">
-      <div>© {year} {SITE.name}. {t(locale,'footer.rights')}</div>
-      <div>{SITE.address.locality}, {SITE.address.countryName}</div>
+    <div class="mt-16 pt-6 border-t border-[var(--color-line)] text-xs text-white/60">
+      © {year} {SITE.name}. {t(locale, 'footer.rights')}
     </div>
   </div>
 </footer>

@@ -1,13 +1,14 @@
 ---
 import { t, localizedPath } from '../i18n/ui';
 import type { Locale } from '../config/site';
-import { SITE } from '../config/site';
 import { altLocalePath } from '../lib/paths';
+import Icon from './Icon.astro';
 
 export interface Props { locale: Locale; currentPath: string }
 const { locale, currentPath } = Astro.props;
 const altLocale: Locale = locale === 'id' ? 'en' : 'id';
 const altPath = altLocalePath(currentPath, locale);
+const briefHref = `${localizedPath(locale, '/')}#brief`;
 
 const nav = [
   { key: 'nav.services' as const, href: locale === 'id' ? '/layanan' : '/en/services' },
@@ -16,37 +17,78 @@ const nav = [
   { key: 'nav.blog' as const, href: localizedPath(locale, '/blog') },
   { key: 'nav.contact' as const, href: locale === 'id' ? '/kontak' : '/en/contact' },
 ];
+const isCurrent = (href: string) => currentPath.replace(/\/$/, '').startsWith(href);
 ---
-<header class="sticky top-0 z-40 backdrop-blur-md bg-[rgba(10,10,11,0.7)] border-b border-[var(--color-line)]">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-    <a href={localizedPath(locale, '/')} class="flex items-center gap-2.5 group" data-cursor="link" aria-label="Kamp Motion Studio — Home">
-      <img src="/assets/logo/kamp-motion-3.png" alt="Kamp Motion Studio" class="h-7 sm:h-8 w-auto" width="36" height="32" />
-      <span class="font-display font-bold tracking-tight text-base sm:text-lg sr-only sm:not-sr-only">
-        Kamp <span class="text-[var(--color-lime)]">Motion.</span>
-      </span>
+<header class="sticky top-0 z-40 backdrop-blur-md bg-[rgba(10,10,11,0.85)] border-b border-[var(--color-line)]">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <a href={localizedPath(locale, '/')} class="flex items-center gap-2.5" aria-label="Kamp Motion Studio — Home">
+      <img src="/assets/logo/kamp-motion-3.png" alt="" class="h-7 sm:h-8 w-auto" width="36" height="32" />
+      <span class="font-display font-bold tracking-tight text-base sm:text-lg max-sm:sr-only">Kamp <span class="text-[var(--color-lime)]">Motion.</span></span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-7 text-sm">
+    <nav class="hidden md:flex items-center gap-7 text-sm" aria-label={locale === 'id' ? 'Utama' : 'Main'}>
       {nav.map((n) => (
-        <a href={n.href} data-cursor="link" class="km-link text-white/75 hover:text-white transition-colors">{t(locale, n.key)}</a>
+        <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}
+           class="km-link text-white/75 hover:text-white aria-[current=page]:text-white transition-colors">{t(locale, n.key)}</a>
       ))}
     </nav>
 
     <div class="flex items-center gap-2 sm:gap-3">
       <button data-cmd-trigger type="button"
         class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--color-line-strong)] hover:border-white/40 text-xs text-white/75 hover:text-white transition">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <Icon name="search" size={14} />
         <span>{locale === 'id' ? 'Cari' : 'Search'}</span>
-        <kbd class="ml-1 px-1.5 py-0.5 rounded bg-white/10 text-[10px] font-mono">⌘K</kbd>
+        <kbd class="ml-1 px-1.5 py-0.5 rounded bg-white/10 text-xs font-mono">⌘K</kbd>
       </button>
-      <a href={altPath} class="text-xs uppercase tracking-widest text-white/50 hover:text-[var(--color-lime)] transition">
+      <a href={altPath} hreflang={altLocale} class="text-xs font-medium text-white/60 hover:text-white px-2 py-2 transition"
+         aria-label={locale === 'id' ? 'English version' : 'Versi Bahasa Indonesia'}>
         {altLocale.toUpperCase()}
       </a>
-      <a href="#brief" data-magnetic="0.25" data-cursor="link"
-        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--color-lime)] text-[#0a0a0b] text-xs sm:text-sm font-semibold hover:bg-[var(--color-lime-2)] transition">
+      <a href={briefHref}
+        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[var(--color-lime)] text-[#0a0a0b] text-sm font-semibold hover:bg-[var(--color-lime-2)] transition">
         {t(locale, 'cta.start')}
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
+
+      <details class="km-menu md:hidden">
+        <summary class="grid place-items-center w-10 h-10 -mr-2 rounded-full text-white hover:bg-white/10 cursor-pointer"
+                 aria-label={locale === 'id' ? 'Menu' : 'Menu'}>
+          <span class="km-menu-open"><Icon name="menu" size={22} /></span>
+          <span class="km-menu-close"><Icon name="close" size={22} /></span>
+        </summary>
+        <div class="absolute left-0 right-0 top-16 border-b border-[var(--color-line)] bg-[var(--color-ink)] px-4 sm:px-6 pt-2 pb-6">
+          <nav aria-label={locale === 'id' ? 'Utama' : 'Main'}>
+            <ul>
+              {nav.map((n) => (
+                <li class="border-b border-[var(--color-line)]">
+                  <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}
+                     class="block py-4 font-display text-2xl font-bold tracking-tight aria-[current=page]:text-[var(--color-lime)]">{t(locale, n.key)}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <a href={briefHref} class="km-btn-lime mt-6 w-full justify-center">{t(locale, 'cta.start')}</a>
+        </div>
+      </details>
     </div>
   </div>
 </header>
+
+<script>
+  // Close the mobile menu on outside tap, on any link tap (same-page anchors don't swap the header) and on Escape.
+  const menu = () => document.querySelector<HTMLDetailsElement>('details.km-menu');
+  document.addEventListener('click', (e) => {
+    const m = menu();
+    if (m?.open && (!m.contains(e.target as Node) || (e.target as Element).closest('a'))) m.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    const m = menu();
+    if (e.key === 'Escape' && m?.open) { m.open = false; m.querySelector('summary')?.focus(); }
+  });
+</script>
+
+<style>
+  .km-menu > summary { list-style: none; }
+  .km-menu > summary::-webkit-details-marker { display: none; }
+  .km-menu .km-menu-close, .km-menu[open] .km-menu-open { display: none; }
+  .km-menu[open] .km-menu-close { display: block; }
+</style>

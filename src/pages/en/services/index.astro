@@ -20,10 +20,9 @@ const jsonLd = [
 ---
 <BaseLayout {title} {description} {locale} path="/services" {jsonLd}>
   <PageHero
-    kicker="Services"
-    title="Complete *visual solutions* for modern brands."
+    title="Complete visual solutions for modern brands."
     lead="Eight creative services blending human expertise with AI — fast, precise, and still soulful."
   />
-  <ServicesGrid locale={locale} />
+  <ServicesGrid locale={locale} heading={false} />
   <CTA locale={locale} />
 </BaseLayout>

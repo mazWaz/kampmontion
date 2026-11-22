@@ -1,9 +1,10 @@
 ---
+import Icon from './Icon.astro';
 import { services } from '../data/services';
 import { t } from '../i18n/ui';
 import type { Locale } from '../config/site';
-export interface Props { locale: Locale }
-const { locale } = Astro.props;
+export interface Props { locale: Locale; heading?: boolean }
+const { locale, heading = true } = Astro.props;
 
 // Bento: first card spans 2 cols on lg
 const sizes = [
@@ -12,28 +13,28 @@ const sizes = [
   '', '',
 ];
 ---
-<section class="relative py-24 md:py-32">
+<section class:list={['relative', heading ? 'py-24 md:py-32' : 'pb-24 md:pb-32']}>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-      <div>
-        <h2 class="km-h2 mt-4 max-w-2xl">
-          {locale === 'id' ? <>Solusi visual <em>lengkap</em> untuk brand modern.</> : <>Complete <em>visual solutions</em> for modern brands.</>}
+    {heading && (
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <h2 class="km-h2 max-w-2xl">
+          {locale === 'id' ? 'Delapan layanan, satu studio.' : 'Eight services, one studio.'}
         </h2>
+        <a href={locale==='id'?'/layanan':'/en/services'} class="km-link text-sm text-white/70 hover:text-white">
+          {locale === 'id' ? 'Semua layanan' : 'All services'}
+        </a>
       </div>
-      <a href={locale==='id'?'/layanan':'/en/services'} data-cursor="link" class="km-link text-sm text-white/60 hover:text-[var(--color-lime)] uppercase tracking-widest font-display">
-        {locale === 'id' ? 'Lihat semua →' : 'View all →'}
-      </a>
-    </div>
+    )}
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[200px] gap-4">
       {services.map((s, i) => (
         <a href={locale==='id'?`/layanan/${s.slug}`:`/en/services/${s.slugEn}`}
-           data-spotlight data-cursor="link"
+
            class={`km-bento km-svc-card group ${sizes[i] || ''}`}>
           <img src={s.image} alt="" width="1200" height="800" loading="lazy" decoding="async" class="km-svc-img" />
           <div class="km-svc-overlay"></div>
           <span class="km-svc-arrow">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            <Icon name="arrow-up-right" size={20} />
           </span>
           <div class="km-svc-content">
             <h3>{s.title[locale]}</h3>
@@ -52,25 +53,16 @@ const sizes = [
   .km-svc-img {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
-    object-fit: cover; opacity: 0.32;
-    transition: opacity .5s, transform .8s;
+    object-fit: cover; opacity: 0.75;
+    transition: opacity .3s;
     z-index: 0;
   }
-  .km-svc-card:hover .km-svc-img { opacity: 0.5; transform: scale(1.04); }
+  .km-svc-card:hover .km-svc-img { opacity: 1; }
   .km-svc-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to top,
-      var(--color-ink) 0%,
-      rgba(17,17,20,0.85) 45%,
-      rgba(17,17,20,0.35) 100%);
+    /* Dark only where the text sits, so the still stays visible. */
+    background: linear-gradient(to top, rgba(10,10,11,.92) 0%, rgba(10,10,11,.6) 38%, rgba(10,10,11,0) 70%);
     z-index: 1;
-  }
-  .km-svc-num {
-    position: absolute; top: 1.25rem; left: 1.5rem;
-    z-index: 3;
-    font: 600 11px/1 var(--font-display);
-    letter-spacing: .25em; text-transform: uppercase;
-    color: rgba(255,255,255,0.65);
   }
   .km-svc-arrow {
     position: absolute; top: 1.25rem; right: 1.5rem;
@@ -86,8 +78,7 @@ const sizes = [
     font-family: var(--font-display); font-weight: 700;
     font-size: clamp(1.25rem, 2.2vw, 1.875rem);
     line-height: 1.05; letter-spacing: -0.02em;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.55);
-    margin: 0;
+        margin: 0;
   }
   .km-svc-content p {
     margin: .75rem 0 0;

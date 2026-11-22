@@ -2,6 +2,7 @@
 import { services } from '../data/services';
 import { SITE } from '../config/site';
 import type { Locale } from '../config/site';
+import Icon from './Icon.astro';
 export interface Props { locale: Locale }
 const { locale } = Astro.props;
 
@@ -24,22 +25,22 @@ const tt = (id: string, en: string) => locale === 'id' ? id : en;
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex items-end justify-between gap-6 mb-12 flex-wrap">
       <div>
-        <h2 class="km-h1 mt-6 max-w-3xl">
-          {tt(<>Brief profesional. <em>30 detik</em>.</>, <>Pro brief. <em>30 seconds</em>.</>)}
+        <h2 class="km-h2 max-w-3xl">
+          {tt('Brief proyek dalam 30 detik.', 'A project brief in 30 seconds.')}
         </h2>
         <p class="mt-5 text-white/65 max-w-xl text-lg">
           {tt(
-            'Pilih opsi, kami susun brief lengkap & estimasi paket — siap kirim ke WhatsApp.',
-            'Pick options, we draft a complete brief with package estimate — ready for WhatsApp.'
+            'Pilih beberapa opsi. Kami susun brief lengkap dengan estimasi paket, siap dikirim lewat WhatsApp.',
+            'Pick a few options. We draft a complete brief with a package estimate, ready to send on WhatsApp.'
           )}
         </p>
       </div>
     </div>
 
     <div class="grid lg:grid-cols-[1.1fr_1fr] gap-5">
-      <form id="km-brief" class="space-y-7 p-8 md:p-10 rounded-3xl bg-[var(--color-ink-2)] border border-[var(--color-line)]">
-        <div>
-          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]">{tt('Layanan', 'Service')}</label>
+      <form id="km-brief" class="space-y-7 p-5 sm:p-8 md:p-10 rounded-2xl bg-[var(--color-ink-2)] border border-[var(--color-line)]">
+        <fieldset>
+          <legend class="km-label text-sm text-white/80">{tt('Layanan', 'Service')}</legend>
           <div class="mt-4 flex flex-wrap gap-2">
             {services.map((s) => (
               <label class="km-pill">
@@ -49,29 +50,29 @@ const tt = (id: string, en: string) => locale === 'id' ? id : en;
               </label>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         <div class="grid sm:grid-cols-2 gap-5">
           <div>
-            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-industry">{tt('Industri', 'Industry')}</label>
+            <label class="km-label text-sm text-white/80" for="km-industry">{tt('Industri', 'Industry')}</label>
             <select id="km-industry" name="industry" class="km-select mt-2" data-fancy>
               {industries.map((i) => <option value={i}>{i}</option>)}
             </select>
           </div>
           <div>
-            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-goal">{tt('Tujuan', 'Goal')}</label>
+            <label class="km-label text-sm text-white/80" for="km-goal">{tt('Tujuan', 'Goal')}</label>
             <select id="km-goal" name="goal" class="km-select mt-2" data-fancy>
               {goals.map((g) => <option value={g}>{g}</option>)}
             </select>
           </div>
           <div>
-            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-duration">{tt('Durasi', 'Duration')}</label>
+            <label class="km-label text-sm text-white/80" for="km-duration">{tt('Durasi', 'Duration')}</label>
             <select id="km-duration" name="duration" class="km-select mt-2" data-fancy>
               {durations.map((d) => <option value={d}>{d}</option>)}
             </select>
           </div>
           <div>
-            <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-budget">{tt('Budget', 'Budget')}</label>
+            <label class="km-label text-sm text-white/80" for="km-budget">{tt('Budget', 'Budget')}</label>
             <select id="km-budget" name="budget" class="km-select mt-2" data-fancy>
               {budgets.map((b) => <option value={b}>{b}</option>)}
             </select>
@@ -79,30 +80,30 @@ const tt = (id: string, en: string) => locale === 'id' ? id : en;
         </div>
 
         <div>
-          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-detail">{tt('Catatan (opsional)', 'Notes (optional)')}</label>
+          <label class="km-label text-sm text-white/80" for="km-detail">{tt('Catatan (opsional)', 'Notes (optional)')}</label>
           <textarea id="km-detail" name="detail" rows="3" class="km-input mt-2" placeholder={tt('Mis: butuh selesai sebelum acara 25 Juni…', 'e.g. needs to be done before June 25 event…')}></textarea>
         </div>
 
         <div>
-          <label class="text-xs font-display uppercase tracking-widest text-[var(--color-lime)]" for="km-name">{tt('Nama / Brand', 'Name / Brand')}</label>
-          <input id="km-name" name="name" type="text" class="km-input mt-2" placeholder={tt('Anda / perusahaan', 'You / company')} />
+          <label class="km-label text-sm text-white/80" for="km-name">{tt('Nama atau brand', 'Name or brand')}</label>
+          <input id="km-name" name="name" type="text" class="km-input mt-2" placeholder={tt('Nama Anda atau perusahaan', 'Your name or company')} />
         </div>
       </form>
 
-      <aside class="lg:sticky lg:top-24 self-start p-8 md:p-10 rounded-3xl bg-[var(--color-lime)] text-[#0a0a0b]">
+      <aside class="lg:sticky lg:top-24 self-start p-5 sm:p-8 md:p-10 rounded-2xl bg-[var(--color-lime)] text-[#0a0a0b]">
         <div class="flex items-center justify-between">
-          <div class="text-xs font-display uppercase tracking-widest font-bold">{tt('Preview Brief', 'Brief Preview')}</div>
-          <div id="km-brief-counter" class="text-xs font-mono opacity-70">0 / 4</div>
+          <div class="text-sm font-semibold">{tt('Preview brief', 'Brief preview')}</div>
+          <div id="km-brief-counter" class="text-sm tabular-nums opacity-70">0 / 4</div>
         </div>
-        <pre id="km-brief-preview" class="mt-5 whitespace-pre-wrap text-sm leading-relaxed font-mono min-h-[280px] text-[#0a0a0b]/85">{tt('Mulai pilih opsi di sebelah kiri…', 'Start by choosing options on the left…')}</pre>
+        <pre id="km-brief-preview" class="mt-5 whitespace-pre-wrap font-[inherit] text-sm leading-relaxed min-h-[120px] lg:min-h-[280px] text-[#0a0a0b]/85">{tt('Pilih layanan di form untuk mulai menyusun brief.', 'Pick a service in the form to start your brief.')}</pre>
         <div id="km-brief-estimate" class="mt-5 p-4 rounded-2xl bg-[#0a0a0b] text-white text-sm hidden">
-          <div class="text-[10px] font-display uppercase tracking-widest text-[var(--color-lime)]">{tt('Estimasi paket', 'Estimate')}</div>
+          <div class="km-label">{tt('Estimasi paket', 'Estimate')}</div>
           <div id="km-brief-package" class="mt-1 font-display text-xl font-bold tracking-tight"></div>
           <div id="km-brief-timeline" class="mt-1 text-white/60 text-xs"></div>
         </div>
-        <a id="km-brief-send" href="#" target="_blank" rel="noopener" data-magnetic="0.2" data-cursor="link"
+        <a id="km-brief-send" href="#" target="_blank" rel="noopener"
            class="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#0a0a0b] text-white font-medium opacity-50 pointer-events-none transition hover:bg-black">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 1 1 17.1-3.8z"/></svg>
+          <Icon name="whatsapp" size={18} />
           <span>{tt('Kirim via WhatsApp', 'Send via WhatsApp')}</span>
         </a>
         <div class="mt-3 text-xs opacity-60">
@@ -127,7 +128,7 @@ function kmBriefInit() {
   const send = document.getElementById('km-brief-send');
 
   const T = locale === 'id' ? {
-    placeholder: 'Mulai pilih opsi di sebelah kiri…',
+    placeholder: 'Pilih layanan di form untuk mulai menyusun brief.',
     title: 'BRIEF PROYEK — KAMP MOTION STUDIO',
     services: 'Layanan', industry: 'Industri', goal: 'Tujuan', duration: 'Durasi',
     budget: 'Budget', notes: 'Catatan', name: 'Dari',
@@ -135,7 +136,7 @@ function kmBriefInit() {
     pkgQuick: 'Paket Standar', pkgPremium: 'Paket Premium', pkgEnterprise: 'Paket Enterprise',
     timeQuick: 'Estimasi 5–10 hari kerja', timeStd: 'Estimasi 2–3 minggu', timeBig: 'Estimasi 4–6 minggu',
   } : {
-    placeholder: 'Start by choosing options on the left…',
+    placeholder: 'Pick a service in the form to start your brief.',
     title: 'PROJECT BRIEF — KAMP MOTION STUDIO',
     services: 'Services', industry: 'Industry', goal: 'Goal', duration: 'Duration',
     budget: 'Budget', notes: 'Notes', name: 'From',
@@ -340,7 +341,7 @@ document.addEventListener('astro:page-load', kmBriefInit);
   .km-pill.on .km-pill-dot { background: #0a0a0b; border-color: #0a0a0b; box-shadow: inset 0 0 0 3px var(--color-lime); }
 
   .km-select, .km-input {
-    width: 100%; padding: .75rem 1rem; border-radius: 12px;
+    width: 100%; padding: .75rem 1rem; border-radius: 8px;
     border: 1px solid var(--color-line-strong); background: rgba(255,255,255,0.03); outline: none;
     font: 500 14px/1.4 'Inter', system-ui, sans-serif; color: #fff;
     transition: border-color .15s, box-shadow .15s;
@@ -358,7 +359,7 @@ document.addEventListener('astro:page-load', kmBriefInit);
   }
   .km-fselect-btn {
     width: 100%; display: flex; align-items: center; justify-content: space-between; gap: .75rem;
-    padding: .85rem 1rem; border-radius: 12px;
+    padding: .85rem 1rem; border-radius: 8px;
     border: 1px solid var(--color-line-strong); background: rgba(255,255,255,0.03);
     color: #fff; font: 500 14px/1.4 'Inter', system-ui, sans-serif;
     text-align: left; cursor: pointer; transition: border-color .15s, background .15s;
@@ -374,8 +375,8 @@ document.addEventListener('astro:page-load', kmBriefInit);
     position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 30;
     margin: 0; padding: .35rem; list-style: none;
     background: #14141a; border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px; max-height: 240px; overflow-y: auto;
-    box-shadow: 0 16px 40px rgba(0,0,0,.5);
+    border-radius: 8px; max-height: 240px; overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
     transform: translateY(-4px) scale(.98); opacity: 0; transition: opacity .15s, transform .15s;
   }
   .km-fselect.open .km-fselect-list { transform: translateY(0) scale(1); opacity: 1; }
@@ -387,8 +388,7 @@ document.addEventListener('astro:page-load', kmBriefInit);
   .km-fselect-opt.active { background: rgba(216,242,46,0.12); color: #d8f22e; }
   .km-fselect-opt[aria-selected="true"]::after {
     content: ""; width: 6px; height: 6px; border-radius: 9999px; background: var(--color-lime);
-    box-shadow: 0 0 8px var(--color-lime);
-  }
+      }
   .km-fselect-list::-webkit-scrollbar { width: 6px; }
   .km-fselect-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
 </style>
