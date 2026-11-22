@@ -12,7 +12,7 @@ export const SITE = {
     id: 'Kamp Motion Studio — studio kreatif animasi 2D, motion graphic, dan video produksi yang menggabungkan kreativitas manusia dengan AI. 7+ tahun pengalaman, 50+ klien lokal & internasional.',
     en: 'Kamp Motion Studio — creative studio for 2D animation, motion graphics, and video production combining human creativity with AI. 7+ years experience, 50+ clients worldwide.',
   },
-  email: 'umarakbar35@gmail.com',
+  email: 'kampmotion@gmail.com',
   phone: '+6285693832031',
   phoneDisplay: '+62 856-9383-2031',
   whatsapp: 'https://wa.me/6285693832031',
