@@ -1,7 +1,6 @@
 import { SITE } from '../config/site';
 import type { Locale } from '../config/site';
 import { services } from '../data/services';
-import { testimonials } from '../data/testimonials';
 import { team } from '../data/team';
 import { regions } from '../data/regions';
 
@@ -40,18 +39,6 @@ export function organizationSchema(locale: Locale) {
       '@type': 'Person',
       name: m.name,
       jobTitle: m.role[locale],
-    })),
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '5.0',
-      reviewCount: String(testimonials.length),
-      bestRating: '5',
-    },
-    review: testimonials.slice(0, 5).map((t) => ({
-      '@type': 'Review',
-      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-      author: { '@type': 'Person', name: t.author ?? `${t.source} client` },
-      reviewBody: t.quote,
     })),
   };
 }
