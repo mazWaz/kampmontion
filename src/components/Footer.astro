@@ -3,6 +3,7 @@ import { t, localizedPath } from '../i18n/ui';
 import type { Locale } from '../config/site';
 import { SITE } from '../config/site';
 import { services } from '../data/services';
+import { regionsFor, regionPath } from '../data/regions';
 import Icon from './Icon.astro';
 export interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -20,6 +21,9 @@ const studio = [
   { href: id ? '/kontak' : '/en/contact', label: t(locale, 'nav.contact') },
 ];
 const linkClass = 'km-link text-white/70 hover:text-white';
+const areas = regionsFor(locale);
+// Comma list ending in "dan"/"and": Jakarta, Bali, dan Jawa Timur.
+const sep = (i: number) => (i < areas.length - 2 ? ', ' : i === areas.length - 2 ? (id ? ', dan ' : ', and ') : '');
 ---
 <footer class="border-t border-[var(--color-line)] mt-20">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-10">
@@ -66,6 +70,10 @@ const linkClass = 'km-link text-white/70 hover:text-white';
           <li><a class={linkClass} href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
           <li class="text-white/60">{SITE.address.locality}, {SITE.address.countryName}</li>
         </ul>
+        <p class="mt-6 text-sm text-white/60 leading-relaxed">
+          {id ? 'Melayani klien di ' : 'Working with clients in '}
+          {areas.map((r, i) => <><a class={linkClass} href={regionPath(r)}>{r.name ?? r.label}</a>{sep(i)}</>)}.
+        </p>
       </div>
     </div>
 

@@ -11,6 +11,7 @@ const STATIC_ID_TO_EN: Array<[RegExp, string]> = [
   [/^\/tentang\/?$/,   '/en/about'],
   [/^\/kontak\/?$/,    '/en/contact'],
   [/^\/blog\/?$/,      '/en/blog'],
+  [/^\/wilayah(\/|$)/, '/en/services'], // region pages are Indonesian-only
 ];
 
 const STATIC_EN_TO_ID: Array<[RegExp, string]> = [
@@ -20,6 +21,7 @@ const STATIC_EN_TO_ID: Array<[RegExp, string]> = [
   [/^\/en\/about\/?$/,      '/tentang'],
   [/^\/en\/contact\/?$/,    '/kontak'],
   [/^\/en\/blog\/?$/,       '/en/blog'.replace('/en', '') /* = /blog */],
+  [/^\/en\/areas(\/|$)/,    '/layanan'], // area pages are English-only
 ];
 
 /** Translate the current path to the alternate locale's equivalent path. */

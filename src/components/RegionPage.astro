@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from './PageHero.astro';
+import ProjectCard from './ProjectCard.astro';
+import CTA from './CTA.astro';
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+import { services } from '../data/services';
+import { projects } from '../data/portfolio';
+import { regionPath, type Region } from '../data/regions';
+import { organizationSchema, breadcrumb, faqSchema } from '../lib/schema';
+
+export interface Props { region: Region }
+const { region } = Astro.props;
+const { locale } = region;
+const id = locale === 'id';
+const name = region.name ?? region.label;
+const path = regionPath(region);
+const url = SITE.url + path;
+
+const servicesHref = id ? '/layanan' : '/en/services';
+const serviceHref = (slug: string) => {
+  const s = services.find((x) => x.slug === slug)!;
+  return { href: id ? `/layanan/${s.slug}` : `/en/services/${s.slugEn}`, title: s.title[locale] };
+};
+const related = region.projects.map((slug) => projects.find((p) => p.slug === slug)!);
+
+const faqs = id
+  ? [
+      { question: `Apakah Kamp Motion punya kantor di ${name}?`, answer: `Studio kami di Yogyakarta. Klien di ${name} kami layani jarak jauh: brief lewat WhatsApp atau video call, review lewat tautan, file final dikirim online.` },
+      { question: 'Bisakah meeting atau syuting di lokasi?', answer: region.meeting },
+      { question: 'Berapa lama proses pengerjaannya?', answer: 'Bergantung kompleksitas: 5–14 hari kerja untuk proyek standar, 2–6 minggu untuk proyek besar atau kustom.' },
+      { question: 'Bagaimana sistem pembayarannya?', answer: '50% di awal sebagai DP setelah brief disepakati, 50% setelah delivery final.' },
+    ]
+  : [
+      { question: `Do you work with clients in ${name}?`, answer: 'Yes. Our studio is in Yogyakarta, Indonesia, and we work fully remote: briefs over video call, reviews through shared links, final files delivered online.' },
+      { question: 'How do time zones work?', answer: region.meeting },
+      { question: 'How long does a project take?', answer: 'Depends on complexity: 5–14 business days for standard projects, 2–6 weeks for larger or custom work.' },
+      { question: 'How does payment work?', answer: '50% upfront once the brief is agreed, 50% on final delivery.' },
+    ];
+
+const jsonLd = [
+  organizationSchema(locale),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: region.h1,
+    serviceType: id ? 'Jasa video animasi dan motion graphic' : 'Animation and motion graphics production',
+    description: region.description,
+    provider: { '@id': `${SITE.url}#organization` },
+    areaServed: region.area,
+    url,
+  },
+  faqSchema(faqs),
+  breadcrumb([
+    { name: id ? 'Beranda' : 'Home', url: SITE.url + (id ? '/' : '/en') },
+    { name: id ? 'Layanan' : 'Services', url: SITE.url + servicesHref },
+    { name: region.label, url },
+  ]),
+];
+---
+<BaseLayout title={region.title} description={region.description} {locale} path={id ? path : path.slice(3)} {jsonLd} translated={false}>
+  <PageHero back={{ href: servicesHref, label: id ? 'Semua layanan' : 'All services' }} title={region.h1} lead={region.lead}>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href={SITE.whatsapp} target="_blank" rel="noopener" class="km-btn-lime">
+        <Icon name="whatsapp" size={18} />
+        {id ? 'Diskusi via WhatsApp' : 'Chat on WhatsApp'}
+      </a>
+      <a href={id ? '/#brief' : '/en/#brief'} class="km-btn-ghost">{id ? 'Buat brief otomatis' : 'Auto-generate a brief'}</a>
+    </div>
+  </PageHero>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="km-label">{id ? 'Area yang kami layani' : 'Where we work'}</h2>
+      <p class="mt-6 max-w-5xl font-display text-3xl md:text-5xl font-bold tracking-tight leading-tight text-white/85">
+        {region.cities.join(', ')}.
+      </p>
+      <p class="mt-8 max-w-2xl text-lg text-white/70 leading-relaxed">{region.proof}</p>
+    </div>
+  </section>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="km-h2 max-w-3xl">{id ? `Yang sering dipesan klien di ${name}.` : `What clients in ${name} ask us for.`}</h2>
+      <div class="mt-12 grid gap-10 md:grid-cols-3">
+        {region.needs.map((n) => {
+          const s = serviceHref(n.service);
+          return (
+            <div class="border-t border-[var(--color-line-strong)] pt-6">
+              <h3 class="font-display font-bold text-xl tracking-tight">{n.title}</h3>
+              <p class="mt-3 text-white/70 leading-relaxed">{n.text}</p>
+              <a href={s.href} class="mt-4 inline-block km-link text-sm text-white/70 hover:text-white">
+                {id ? `Lihat layanan ${s.title}` : `See ${s.title}`}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-6 mb-10 flex-wrap">
+        <h2 class="km-h2 max-w-2xl">{id ? 'Karya terkait.' : 'Related work.'}</h2>
+        <a href={id ? '/portfolio' : '/en/portfolio'} class="km-link text-sm text-white/70 hover:text-white">{id ? 'Semua portfolio' : 'All work'}</a>
+      </div>
+      <div class="grid gap-x-5 gap-y-10 md:grid-cols-3">
+        {related.map((p) => <ProjectCard project={p} {locale} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-20 md:py-28 border-t border-[var(--color-line)]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="km-h2 max-w-2xl">{id ? 'Pertanyaan umum.' : 'Common questions.'}</h2>
+      <div class="mt-10 grid gap-3 max-w-3xl">
+        {faqs.map((f) => (
+          <details class="group rounded-2xl border border-[var(--color-line)] bg-[var(--color-ink-2)] open:border-[var(--color-line-strong)] transition-colors">
+            <summary class="cursor-pointer list-none p-5 md:p-6 flex items-center justify-between gap-4 font-display font-semibold text-base md:text-lg">
+              <span>{f.question}</span>
+              <span class="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--color-line-strong)] grid place-items-center transition group-open:border-white/40">
+                <Icon name="plus" size={14} class="transition-transform group-open:rotate-45" />
+              </span>
+            </summary>
+            <p class="px-5 md:px-6 pb-5 md:pb-6 text-white/70 leading-relaxed">{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTA {locale} />
+</BaseLayout>

@@ -16,9 +16,10 @@ export interface Props {
   jsonLd?: unknown[];
   type?: 'website' | 'article';
   noindex?: boolean;
+  translated?: boolean;
 }
 
-const { title, description, locale, path, ogImage, jsonLd, type, noindex } = Astro.props;
+const { title, description, locale, path, ogImage, jsonLd, type, noindex, translated } = Astro.props;
 const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
 ---
 <!doctype html>
@@ -27,7 +28,7 @@ const htmlLang = locale === 'id' ? 'id-ID' : 'en-US';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <SEO {title} {description} {locale} {path} {ogImage} {jsonLd} {type} {noindex} />
+    <SEO {title} {description} {locale} {path} {ogImage} {jsonLd} {type} {noindex} {translated} />
     <ClientRouter fallback="swap" />
   </head>
   <body class="min-h-screen flex flex-col">

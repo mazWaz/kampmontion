@@ -3,6 +3,7 @@ import type { Locale } from '../config/site';
 import { services } from '../data/services';
 import { testimonials } from '../data/testimonials';
 import { team } from '../data/team';
+import { regions } from '../data/regions';
 
 export function organizationSchema(locale: Locale) {
   return {
@@ -24,7 +25,7 @@ export function organizationSchema(locale: Locale) {
       addressRegion: SITE.address.region,
       addressCountry: SITE.address.country,
     },
-    areaServed: ['ID', 'Worldwide'],
+    areaServed: [{ '@type': 'Country', name: 'Indonesia' }, ...regions.map((r) => r.area)],
     sameAs: Object.values(SITE.social),
     knowsAbout: [
       '2D Animation',
