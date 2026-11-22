@@ -3,7 +3,7 @@
 Bilingual (ID/EN), SEO-first, static site untuk Kamp Motion Studio. Dibangun dengan Astro + Tailwind, 100% pre-rendered, dan dilengkapi structured data untuk Google + AI search engine (GPTBot, ClaudeBot, PerplexityBot, dll).
 
 ## Teknologi
-- **Astro 5** (SSG, zero JS by default)
+- **Astro 7** (SSG, zero JS by default; requires Node >= 22.23.4)
 - **Tailwind CSS v4** (via Vite plugin)
 - **@astrojs/sitemap** (sitemap-index.xml otomatis bilingual)
 - **TypeScript strict**
@@ -48,20 +48,26 @@ npm run preview  # preview build
 
 ## Deploy
 
-### Vercel
-1. Push repo ke GitHub
-2. `vercel.com/new` → import repo
-3. Framework: Astro (auto-detected)
-4. Domain: tambahkan domain final di Settings → Domains
+### Cloudflare Workers (production)
+Live at https://kampmontion.account-021.workers.dev. Workers Builds deploys every push to `main`; each GitHub commit shows the result as the "Workers Builds: kampmontion" check.
 
-`vercel.json` sudah berisi security headers + cache rules.
+- `wrangler.jsonc` runs `npm run build` and serves `./dist` as static assets. No adapter or Worker script: the site is fully static.
+- Keep `wrangler.jsonc` in the repo. Without it, Cloudflare's autoconfig runs `astro add cloudflare`, which adds an SSR adapter this static site does not need and breaks the build.
+- `public/_headers` (security + cache headers) and `public/_redirects` (English paths without `/en`) are applied by Workers static assets.
+- Renamed portfolio slugs redirect through `redirects` in `astro.config.mjs` (built as meta-refresh pages, so they work on any host).
 
-### Cloudflare Pages
-1. Push repo ke GitHub
-2. Cloudflare Dashboard → Pages → Connect to Git
-3. Build command: `npm run build`
-4. Output dir: `dist`
-5. `public/_headers` sudah disediakan
+```bash
+npx wrangler dev      # serve the build with _headers/_redirects at http://localhost:8787
+npx wrangler deploy   # manual deploy from local (run `npx wrangler login` first)
+```
+
+Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Settings → Domains & Routes. Then update the domain in the files from item 1 of "Yang Perlu Diganti Sebelum Live" below, plus `SITE` in `astro.config.mjs` (sitemap).
+
+### Vercel (alternative)
+1. `vercel.com/new` → import the repo (Astro is auto-detected)
+2. Add the domain under Settings → Domains
+
+`vercel.json` has the same security headers and cache rules. `public/_redirects` is Cloudflare-only, so its `/services`, `/about`, `/contact` → `/en/...` fallbacks need to be added to `vercel.json` if you move hosts.
 
 ## Yang Perlu Diganti Sebelum Live
 
