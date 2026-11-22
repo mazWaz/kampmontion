@@ -141,6 +141,3 @@ export const projects: Project[] = [
     tags: ['Logo Animation', 'Logo Reveal', 'Brand'],
   },
 ];
-
-export const getProject = (slug: string): Project | undefined =>
-  projects.find((p) => p.slug === slug);

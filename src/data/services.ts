@@ -183,6 +183,3 @@ export const services: Service[] = [
     },
   },
 ];
-
-export const getService = (slug: string, locale: Locale): Service | undefined =>
-  services.find((s) => (locale === 'en' ? s.slugEn : s.slug) === slug);

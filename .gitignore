@@ -27,3 +27,8 @@ pnpm-debug.log*
 .temp/
 .asset/
 
+
+# local Claude Code state
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+__pycache__/
