@@ -6,9 +6,8 @@ export type Project = {
   client: string;
   category: Record<Locale, string>;
   year: string;
-  cover: string; // path to image (mock)
-  videoUrl?: string;
-  thumbnailUrl?: string;
+  cover: string;
+  youtubeId: string;
   summary: Record<Locale, string>;
   description: Record<Locale, string>;
   tags: string[];
@@ -24,7 +23,8 @@ export const projects: Project[] = [
     client: 'Confidential Fintech (NDA)',
     category: { id: 'Animasi 2D', en: '2D Animation' },
     year: '2025',
-    cover: '/assets/portfolio/fintech-onboarding-explainer.jpg',
+    cover: '/assets/video/wgo5x7KFkPA.jpg',
+    youtubeId: 'wgo5x7KFkPA',
     summary: {
       id: 'Eksplainer 90 detik untuk onboarding pengguna baru aplikasi fintech.',
       en: '90-second explainer for new-user onboarding of a fintech app.',
@@ -44,7 +44,8 @@ export const projects: Project[] = [
     client: 'Banking Sector Client',
     category: { id: 'Video Company Profile', en: 'Company Profile Video' },
     year: '2024',
-    cover: '/assets/portfolio/corporate-profile-banking.jpg',
+    cover: '/assets/video/bXW_YxaoaB4.jpg',
+    youtubeId: 'bXW_YxaoaB4',
     summary: {
       id: 'Video company profile sinematik 4 menit untuk peluncuran produk baru.',
       en: 'Cinematic 4-minute corporate profile video for a new product launch.',
@@ -64,7 +65,8 @@ export const projects: Project[] = [
     client: 'International NGO',
     category: { id: 'Motion Graphic', en: 'Motion Graphics' },
     year: '2024',
-    cover: '/assets/portfolio/ngo-campaign-motion.jpg',
+    cover: '/assets/video/uGB0htzxUsc.jpg',
+    youtubeId: 'uGB0htzxUsc',
     summary: {
       id: 'Seri 6 video motion graphic untuk kampanye kesehatan global.',
       en: 'Series of 6 motion graphic videos for a global health campaign.',
@@ -84,7 +86,8 @@ export const projects: Project[] = [
     client: 'Tech Startup',
     category: { id: 'Video Bumper Event', en: 'Event Bumper Video' },
     year: '2025',
-    cover: '/assets/portfolio/product-launch-bumper.jpg',
+    cover: '/assets/video/p6eVaS9cFHU.jpg',
+    youtubeId: 'p6eVaS9cFHU',
     summary: {
       id: 'Bumper opening 20 detik untuk acara peluncuran produk SaaS.',
       en: '20-second opening bumper for a SaaS product launch event.',
@@ -104,7 +107,8 @@ export const projects: Project[] = [
     client: 'EdTech Indonesia',
     category: { id: 'Animasi 2D', en: '2D Animation' },
     year: '2023',
-    cover: '/assets/portfolio/edu-platform-2d-series.png',
+    cover: '/assets/video/0dQiPQM-Ob8.jpg',
+    youtubeId: '0dQiPQM-Ob8',
     summary: {
       id: '12 video animasi 2D untuk kurikulum SMP daring.',
       en: '12 animated 2D videos for an online junior-high curriculum.',
@@ -124,7 +128,8 @@ export const projects: Project[] = [
     client: 'Multiple Clients',
     category: { id: 'Logo Animation', en: 'Logo Animation' },
     year: '2024',
-    cover: '/assets/portfolio/logo-sting-pack.webp',
+    cover: '/assets/video/dNwGqPJjSjI.jpg',
+    youtubeId: 'dNwGqPJjSjI',
     summary: {
       id: 'Lima animasi logo untuk brand startup, NGO, dan korporat.',
       en: 'Five logo animations for startup, NGO, and corporate brands.',

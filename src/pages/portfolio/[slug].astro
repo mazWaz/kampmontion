@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CTA from '../../components/CTA.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
 import { projects } from '../../data/portfolio';
 import { SITE } from '../../config/site';
 import { organizationSchema, breadcrumb } from '../../lib/schema';
@@ -60,9 +61,7 @@ const jsonLd = [
 
     <div class="relative">
       <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div class="aspect-video rounded-3xl overflow-hidden border border-[var(--color-line)] bg-[var(--color-ink-2)]">
-          <img src={project.cover} alt={project.title.id} class="w-full h-full object-cover" width="1200" height="675" />
-        </div>
+        <VideoEmbed id={project.youtubeId} title={project.title.id} />
       </div>
     </div>
 

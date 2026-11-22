@@ -1,0 +1,14 @@
+---
+// Click-to-play YouTube facade without JS: the iframe shows only the poster (via srcdoc)
+// and loads the heavy YouTube player only once the visitor clicks play.
+export interface Props { id: string; title: string }
+const { id, title } = Astro.props;
+const poster = `/assets/video/${id}.jpg`; // local copy of the video thumbnail
+const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+const srcdoc = `<style>*{margin:0;padding:0}html,body{height:100%;overflow:hidden;background:#0a0a0b}a{display:block;height:100%}img{width:100%;height:100%;object-fit:cover}span{position:absolute;inset:0;margin:auto;width:84px;height:84px;border-radius:50%;background:#d8f22e;display:grid;place-items:center;box-shadow:0 14px 40px -8px rgba(216,242,46,.6);transition:transform .25s}a:hover span,a:focus-visible span{transform:scale(1.08)}</style><a href="${src}" aria-label="Play video"><img src="${poster}" alt=""><span><svg width="30" height="30" viewBox="0 0 24 24" fill="#0a0a0b" style="margin-left:5px"><path d="M6 4l14 8-14 8z"/></svg></span></a>`;
+---
+<div class="aspect-video rounded-3xl overflow-hidden border border-[var(--color-line)] bg-[var(--color-ink-2)]">
+  <iframe {src} {srcdoc} {title} class="w-full h-full" width="1200" height="675"
+    allow="autoplay *; encrypted-media *; picture-in-picture *; fullscreen *"></iframe>
+  {/* `*` needed: with srcdoc the default allowlist is our origin, so YouTube would lose these after navigation. */}
+</div>
