@@ -73,11 +73,10 @@ Custom domain: Cloudflare dashboard → Workers & Pages → kampmontion → Sett
 
 ## Yang Perlu Diganti Sebelum Live
 
-1. **Logo asli** → ganti `public/logo.svg`
-2. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
-3. **Blog** → hidden until it has articles: not in the header/footer nav, `noindex`, and filtered out of the sitemap. To bring it back, add the blog link (and a `nav.blog` key in `src/i18n/ui.ts`) to `Header.astro` and `Footer.astro`, drop `noindex` from both blog pages, and remove the sitemap `filter` in `astro.config.mjs`.
-4. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
-5. **Google Business Profile** — daftarkan studio Yogyakarta
+1. **Alamat fisik Jogja** → update `SITE.address` (saat sudah ada)
+2. **Blog** → hidden until it has articles: not in the header/footer nav, `noindex`, and filtered out of the sitemap. To bring it back, add the blog link (and a `nav.blog` key in `src/i18n/ui.ts`) to `Header.astro` and `Footer.astro`, drop `noindex` from both blog pages, and remove the sitemap `filter` in `astro.config.mjs`.
+3. **Google Search Console** + **Bing Webmaster Tools** — submit sitemap setelah live
+4. **Google Business Profile** — daftarkan studio Yogyakarta
 
 ## SEO Checklist Pasca Launch
 

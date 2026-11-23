@@ -12,7 +12,7 @@ export function organizationSchema(locale: Locale) {
     name: SITE.name,
     alternateName: SITE.shortName,
     url: SITE.url,
-    logo: `${SITE.url}/logo.svg`,
+    logo: `${SITE.url}/icon.png`,
     image: `${SITE.url}${SITE.ogImage}`,
     description: SITE.description[locale],
     foundingDate: SITE.founded,
