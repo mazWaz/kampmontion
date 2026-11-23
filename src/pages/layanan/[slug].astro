@@ -15,8 +15,8 @@ export function getStaticPaths() {
 
 const { service } = Astro.props;
 const locale = 'id' as const;
-const title = `${service.title.id} — Jasa Profesional`;
-const description = service.short.id;
+const title = `Jasa ${service.title.id} Jogja & Indonesia | Kamp Motion`;
+const description = `${service.short.id} Berbasis di Jogja, melayani seluruh Indonesia.`;
 const url = `${SITE.url}/layanan/${service.slug}`;
 
 const faqs = [

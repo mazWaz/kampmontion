@@ -39,6 +39,7 @@ Kombinasi kreatif manusia + AI: generative design, automated video editing, AI v
 - [English Site](https://kampmotion.com/en)
 
 ## Wilayah Layanan
+- [Yogyakarta](https://kampmotion.com/wilayah/yogyakarta)
 - [Jakarta](https://kampmotion.com/wilayah/jakarta)
 - [Jawa Barat](https://kampmotion.com/wilayah/jawa-barat)
 - [Jawa Tengah](https://kampmotion.com/wilayah/jawa-tengah)

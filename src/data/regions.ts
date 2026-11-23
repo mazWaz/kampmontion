@@ -25,9 +25,32 @@ export type Region = {
   projects: string[];
   /** Region-specific answer about meetings (ID) or time zones (EN). */
   meeting: string;
+  /** Overrides the "do you have an office here?" answer (the home base). */
+  office?: string;
 };
 
 export const regions: Region[] = [
+  {
+    slug: 'yogyakarta',
+    locale: 'id',
+    label: 'Yogyakarta',
+    name: 'Jogja',
+    area: { '@type': 'AdministrativeArea', name: 'Daerah Istimewa Yogyakarta' },
+    h1: 'Jasa video animasi & motion graphic di Jogja',
+    title: 'Jasa Video Animasi & Motion Graphic Jogja | Kamp Motion',
+    description: 'Jasa video animasi 2D, motion graphic, dan video company profile di Jogja untuk kampus, UMKM, instansi, dan brand di Sleman, Bantul, dan seluruh DIY.',
+    lead: 'Video animasi, motion graphic, dan video company profile untuk kampus, UMKM, instansi, dan brand di Jogja. Tim kami berbasis di Yogyakarta, jadi brief bisa dibahas langsung.',
+    cities: ['Kota Yogyakarta', 'Sleman', 'Bantul', 'Kulon Progo', 'Gunungkidul'],
+    proof: 'Klien kami di Jogja antara lain UGM, Pusaka Jawa UGM, dan UNU Jogja.',
+    needs: [
+      { title: 'Video profil kampus', text: 'Profil kampus dan sekolah untuk penerimaan mahasiswa baru, akreditasi, dan kerja sama.', service: 'video-company-profile' },
+      { title: 'Materi pembelajaran', text: 'Animasi 2D untuk kuliah daring, pelatihan, dan materi sosialisasi yang mudah diikuti.', service: 'animasi-2d' },
+      { title: 'Promosi UMKM dan wisata', text: 'Motion graphic pendek untuk produk lokal, kafe, dan tempat wisata di marketplace dan media sosial.', service: 'motion-graphic' },
+    ],
+    projects: ['united-tractors-teamworking', 'upps-me-explainer', 'logo-animation-reel'],
+    meeting: 'Bisa. Tim kami berbasis di Yogyakarta, jadi meeting tatap muka atau syuting di Jogja mudah diatur. Sampaikan jadwal dan lokasinya saat konsultasi.',
+    office: 'Tim Kamp Motion berbasis di Yogyakarta, jadi klien di Jogja bisa bertemu langsung. Klien di luar kota kami layani jarak jauh lewat WhatsApp atau video call.',
+  },
   {
     slug: 'jakarta',
     locale: 'id',

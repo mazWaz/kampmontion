@@ -9,7 +9,7 @@ export const SITE = {
     en: 'Creative Studio for 2D Animation, Motion Graphics & AI Video',
   },
   description: {
-    id: 'Kamp Motion Studio — studio kreatif animasi 2D, motion graphic, dan video produksi yang menggabungkan kreativitas manusia dengan AI. 7+ tahun pengalaman, 50+ klien lokal & internasional.',
+    id: 'Kamp Motion Studio — studio animasi 2D, motion graphic, dan video produksi di Jogja, melayani seluruh Indonesia dan luar negeri. 7+ tahun, 50+ klien.',
     en: 'Kamp Motion Studio — creative studio for 2D animation, motion graphics, and video production combining human creativity with AI. 7+ years experience, 50+ clients worldwide.',
   },
   email: 'kampmotion@gmail.com',

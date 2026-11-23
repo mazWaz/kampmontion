@@ -27,7 +27,7 @@ const related = region.projects.map((slug) => projects.find((p) => p.slug === sl
 
 const faqs = id
   ? [
-      { question: `Apakah Kamp Motion punya kantor di ${name}?`, answer: `Studio kami di Yogyakarta. Klien di ${name} kami layani jarak jauh: brief lewat WhatsApp atau video call, review lewat tautan, file final dikirim online.` },
+      { question: `Apakah Kamp Motion punya kantor di ${name}?`, answer: region.office ?? `Studio kami di Yogyakarta. Klien di ${name} kami layani jarak jauh: brief lewat WhatsApp atau video call, review lewat tautan, file final dikirim online.` },
       { question: 'Bisakah meeting atau syuting di lokasi?', answer: region.meeting },
       { question: 'Berapa lama proses pengerjaannya?', answer: 'Bergantung kompleksitas: 5–14 hari kerja untuk proyek standar, 2–6 minggu untuk proyek besar atau kustom.' },
       { question: 'Bagaimana sistem pembayarannya?', answer: '50% di awal sebagai DP setelah brief disepakati, 50% setelah delivery final.' },
